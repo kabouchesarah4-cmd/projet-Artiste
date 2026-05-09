@@ -1,0 +1,283 @@
+/* ============================================
+   VARIABLES — La charte graphique du site
+   Changer une couleur ici = ça change partout
+   ============================================ */
+:root {
+    --couleur-fond: #0a0a0a;
+    --couleur-fond-secondaire: #1a1a1a;
+    --couleur-texte: #f5f5f0;
+    --couleur-texte-discret: #888888;
+    --couleur-accent: #c9a84c;
+    --police-titre: 'Playfair Display', serif;
+    --police-corps: 'Inter', sans-serif;
+    --transition: all 0.3s ease;
+}
+
+/* ============================================
+   RESET — Efface les styles par défaut
+   du navigateur pour partir d'une base propre
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* Défilement fluide */
+}
+
+body {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    font-family: var(--police-corps);
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.header {
+    position: fixed;        /* Reste en haut même quand on scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;          /* Au dessus de tout le reste */
+    padding: 1.5rem 4rem;
+    background: rgba(10, 10, 10, 0.9);  /* Légèrement transparent */
+    backdrop-filter: blur(10px);         /* Effet flou derrière */
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.nav {
+    display: flex;                    /* Les éléments côte à côte */
+    justify-content: space-between;   /* Logo à gauche, liens à droite */
+    align-items: center;              /* Centré verticalement */
+    max-width: 1200px;
+    margin: 0 auto;                   /* Centré horizontalement */
+}
+
+.nav-logo a {
+    font-family: var(--police-titre);
+    font-size: 1.4rem;
+    color: var(--couleur-accent);
+    text-decoration: none;
+    letter-spacing: 2px;
+}
+
+.nav-liens {
+    list-style: none;   /* Enlève les puces */
+    display: flex;
+    gap: 3rem;          /* Espace entre les liens */
+}
+
+.nav-liens a {
+    color: var(--couleur-texte);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.nav-liens a:hover,
+.nav-liens a.actif {
+    color: var(--couleur-accent);  /* Doré au survol */
+}
+
+/* ============================================
+   HERO — Grande image plein écran
+   ============================================ */
+.hero {
+    min-height: 100vh;        /* 100% de la hauteur de l'écran */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--couleur-fond);
+    /* On ajoutera une vraie image de fond plus tard */
+    background-image: linear-gradient(
+            rgba(0,0,0,0.6),
+            rgba(0,0,0,0.6)
+    );
+    padding: 2rem;
+}
+
+.hero-contenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.hero-titre {
+    font-family: var(--police-titre);
+    font-size: clamp(3rem, 8vw, 7rem); /* S'adapte à la taille d'écran */
+    font-weight: 400;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--couleur-texte);
+}
+
+.hero-sous-titre {
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--couleur-accent);
+}
+
+/* ============================================
+   BOUTONS
+   ============================================ */
+.bouton-principal {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--couleur-accent);
+    color: var(--couleur-accent);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: var(--transition);
+    margin-top: 1rem;
+}
+
+.bouton-principal:hover {
+    background-color: var(--couleur-accent);
+    color: var(--couleur-fond);
+}
+
+.bouton-secondaire {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--couleur-texte-discret);
+    color: var(--couleur-texte);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: var(--transition);
+    margin-top: 2rem;
+}
+
+.bouton-secondaire:hover {
+    border-color: var(--couleur-accent);
+    color: var(--couleur-accent);
+}
+
+/* ============================================
+   SECTIONS GÉNÉRALES
+   ============================================ */
+.section-titre {
+    font-family: var(--police-titre);
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--couleur-texte);
+}
+
+/* ============================================
+   APERÇU ŒUVRES (page accueil)
+   ============================================ */
+.apercu-oeuvres {
+    padding: 6rem 4rem;
+    background-color: var(--couleur-fond-secondaire);
+    text-align: center;
+}
+
+.apercu-grille {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.apercu-carte {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.apercu-carte img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;      /* L'image remplit sans se déformer */
+    transition: var(--transition);
+    filter: brightness(0.85);
+}
+
+.apercu-carte img:hover {
+    transform: scale(1.03); /* Zoom léger au survol */
+    filter: brightness(1);
+}
+
+.apercu-carte p {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: var(--couleur-texte-discret);
+    text-transform: uppercase;
+}
+
+/* ============================================
+   PRÉSENTATION ARTISTE (page accueil)
+   ============================================ */
+.presentation {
+    padding: 6rem 4rem;
+    text-align: center;
+}
+
+.presentation-contenu {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.presentation-contenu h2 {
+    font-family: var(--police-titre);
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+.presentation-contenu p {
+    color: var(--couleur-texte-discret);
+    line-height: 1.8;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    padding: 3rem 4rem;
+    background-color: var(--couleur-fond-secondaire);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.footer p {
+    font-size: 0.8rem;
+    color: var(--couleur-texte-discret);
+    letter-spacing: 1px;
+}
+
+.footer-reseaux {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-reseaux a {
+    color: var(--couleur-texte-discret);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.footer-reseaux a:hover {
+    color: var(--couleur-accent);
+}
