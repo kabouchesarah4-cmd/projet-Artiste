@@ -25,8 +25,8 @@
     --fond-secondaire:  #111111;   /* Noir légèrement plus clair */
     --fond-carte:       #161616;   /* Pour les cartes et sections */
     --texte:            #f0ede8;   /* Blanc cassé (plus doux que blanc pur) */
-    --texte-discret:    #666666;   /* Gris pour les détails, labels */
-    --texte-moyen:      #999999;   /* Gris moyen */
+    --texte-discret:    #f0ede8;   /* Gris pour les détails, labels */
+    --texte-moyen:      #f0ede8;   /* Gris moyen */
     --accent:           #c9a84c;   /* Doré — la couleur signature */
     --accent-hover:     #e0c06a;   /* Doré plus clair au survol */
     --bordure:          rgba(201, 168, 76, 0.15); /* Bordure dorée très subtile */
