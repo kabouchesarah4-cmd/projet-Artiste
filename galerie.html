@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<!-- navigation-->
+<!-- navigation -->
 <header class="header" id="header">
     <nav class="nav">
         <div class="nav-logo">
@@ -36,7 +36,7 @@
     <p class="page-sous-titre">Peinture · Création numérique · Sculpture · Upcycling</p>
 </div>
 
-<!-- filtres-->
+<!-- filtres par catégorie -->
 <div class="filtres">
     <button class="filtre-btn actif" data-filtre="tout">Tout</button>
     <button class="filtre-btn" data-filtre="numerique">Art numérique</button>
@@ -44,10 +44,13 @@
     <button class="filtre-btn" data-filtre="sculpture">Sculpture</button>
 </div>
 
-<!-- GRILLE DES OEUVRES-->
+<!-- grille des oeuvres
+     pour ajouter une oeuvre : copier-coller un bloc .galerie-carte
+     changer data-categorie, data-titre, data-details
+     remplacer le div.galerie-image par <img src="images/oeuvres/..."> quand la photo est dispo -->
 <main class="galerie-grille" id="galerie-grille">
 
-    <!-- serie de  ZAOULI FUNK (numérique)  -->
+    <!-- série Zaouli Funk -->
 
     <div class="galerie-carte" data-categorie="numerique"
          data-titre="Zaouli Funk I" data-details="Création numérique · 2015–2025">
@@ -79,7 +82,7 @@
         </div>
     </div>
 
-    <!-- === SÉRIE SNEAKER LOVER (numérique) === -->
+    <!-- série Sneaker Lover -->
 
     <div class="galerie-carte" data-categorie="numerique"
          data-titre="Chuck Taylor All Star" data-details="Série Sneaker Lover · Création numérique">
@@ -101,11 +104,11 @@
         </div>
     </div>
 
-    <!--série VOODOO CHILD (numérique)  -->
+    <!-- série Voodoo Child — vraies photos disponibles -->
 
     <div class="galerie-carte" data-categorie="numerique"
          data-titre="Voodoo Child VII" data-details="Série Voodoo Child · Création numérique">
-        <img src="images/oeuvres/voodoo-child-7.jpg" class="galerie-image">
+        <img src="images/oeuvres/voodoo-child-7.jpg" class="galerie-image" alt="Voodoo Child VII">
         <div class="galerie-overlay">
             <p class="galerie-carte-titre">Voodoo Child VII</p>
             <p class="galerie-carte-details">Série Voodoo Child · Numérique</p>
@@ -114,8 +117,18 @@
     </div>
 
     <div class="galerie-carte" data-categorie="numerique"
+         data-titre="Voodoo Child — Prince" data-details="Série Voodoo Child · Création numérique">
+        <img src="images/oeuvres/voodoo-child-prince.jpg" class="galerie-image" alt="Voodoo Child Prince">
+        <div class="galerie-overlay">
+            <p class="galerie-carte-titre">Voodoo Child — Prince</p>
+            <p class="galerie-carte-details">Série Voodoo Child · Numérique</p>
+            <span class="galerie-loupe">+</span>
+        </div>
+    </div>
+
+    <div class="galerie-carte" data-categorie="numerique"
          data-titre="Voodoo Child — Jimi" data-details="Série Voodoo Child · Création numérique">
-        <img src="images/oeuvres/voodoo-jimi.jpg" class="galerie-image">
+        <img src="images/oeuvres/voodoo-jimi.jpg" class="galerie-image" alt="Voodoo Child Jimi">
         <div class="galerie-overlay">
             <p class="galerie-carte-titre">Voodoo Child — Jimi</p>
             <p class="galerie-carte-details">Série Voodoo Child · Numérique</p>
@@ -125,7 +138,7 @@
 
     <div class="galerie-carte" data-categorie="numerique"
          data-titre="Voodoo Child — Bob" data-details="Série Voodoo Child · Création numérique">
-        <div class="galerie-image" style="background: linear-gradient(135deg, #cc0000, #336600, #ffcc00);"></div>
+        <img src="images/oeuvres/voodoo-bob.jpg" class="galerie-image" alt="Voodoo Child Bob">
         <div class="galerie-overlay">
             <p class="galerie-carte-titre">Voodoo Child — Bob</p>
             <p class="galerie-carte-details">Série Voodoo Child · Numérique</p>
@@ -133,7 +146,7 @@
         </div>
     </div>
 
-    <!--  acrylique sur KRAFT / CANVAS -->
+    <!-- acrylique sur kraft et canvas -->
 
     <div class="galerie-carte" data-categorie="acrylique"
          data-titre="Portrait africain" data-details="Acrylique on kraft · A3">
@@ -245,7 +258,7 @@
         </div>
     </div>
 
-    <!-- === sculpture === -->
+    <!-- sculptures -->
 
     <div class="galerie-carte" data-categorie="sculpture"
          data-titre="Amphore — Masque" data-details="Amphore peinte · 70 cm">
@@ -269,7 +282,7 @@
 
 </main>
 
-<!-- LIGHTBOX -->
+<!-- lightbox — s'ouvre quand on clique sur une oeuvre -->
 <div class="lightbox" id="lightbox">
     <button class="lightbox-fermer" id="lightbox-fermer">✕</button>
     <button class="lightbox-prev" id="lightbox-prev">‹</button>
@@ -282,9 +295,11 @@
         </div>
     </div>
 </div>
+
+<!-- fond sombre derrière la lightbox -->
 <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
 
-<!-- FOOTER -->
+<!-- footer -->
 <footer class="footer">
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
