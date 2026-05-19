@@ -1,0 +1,287 @@
+/*
+   RESPONSIVE.CSS — ce fichier est tres important , il sert a l'Adaptation pour les petits écrans
+
+   Ii j ai choisi d' utiliser des "media queries" :
+   @media (max-width: NNNpx) = "si l'écran est plus petit que NNN pixels"
+
+   On part du plus grand vers le plus petit :
+   - Tablette : max 1024px
+   - Mobile   : max 768px
+   - Petit    : max 480px
+    */
+
+
+/*
+   TABLETTE (écran jusqu'à 1024px)
+   Ex: iPad en mode portrait
+    */
+@media (max-width: 1024px) {
+
+    /* Navigation : moins de padding */
+    .header,
+    .header.scrolle {
+        padding: 1.5rem 3rem;
+    }
+
+    .nav-liens {
+        gap: 2rem;
+    }
+
+    /* Sections : moins de padding */
+    :root {
+        --padding-section: 6rem 3rem;
+    }
+
+    .page-header {
+        padding: 12rem 3rem 4rem;
+    }
+
+    /* Accueil : grille en 2 colonnes */
+    .apercu-grille {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    /* La grande carte prend toute la largeur */
+    .apercu-carte--grande {
+        grid-column: 1 / -1;
+    }
+
+    .apercu-carte--grande .apercu-image {
+        height: 400px;
+    }
+
+    /* Présentation : empilé verticalement */
+    .presentation {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        max-width: 600px;
+    }
+
+    /* À propos : empilé verticalement */
+    .apropos-principale {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        padding: 3rem;
+    }
+
+    .apropos-photo-wrapper {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* Contact : empilé verticalement */
+    .contact-section {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        padding: 2rem 3rem 6rem;
+    }
+
+    /* Galerie : 2 colonnes */
+    .galerie-grille {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 3rem 6rem;
+    }
+
+    /* Footer : simplifié */
+    .footer {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 3rem;
+    }
+
+    .footer-copy {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+}
+
+
+/*
+   MOBILE (écran jusqu'à 768px)
+   Ex: smartphone en mode portrait
+    */
+@media (max-width: 768px) {
+
+    /* Navigation mobile : menu hamburger */
+    .header,
+    .header.scrolle {
+        padding: 1.2rem 1.5rem;
+    }
+
+    /* Cache les liens normaux */
+    .nav-liens {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: var(--fond);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+        z-index: 999;
+    }
+
+    /* Quand le menu est ouvert (classe ajoutée par JS) */
+    .nav-liens.ouverte {
+        display: flex;
+    }
+
+    .nav-liens a {
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+    }
+
+    /* Affiche le bouton hamburger */
+    .nav-hamburger {
+        display: flex;
+        z-index: 1001; /* Au dessus du menu ouvert */
+    }
+
+    /* Animation hamburger → croix quand menu ouvert */
+    .nav-hamburger.actif span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .nav-hamburger.actif span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-hamburger.actif span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* Hero : texte plus petit */
+    .hero-prenom {
+        font-size: 1.5rem;
+    }
+
+    .hero-nom {
+        font-size: clamp(2.5rem, 12vw, 5rem);
+        letter-spacing: 4px;
+    }
+
+    .hero-scroll {
+        display: none; /* Cache l'indicateur de scroll sur mobile */
+    }
+
+    /* Sections */
+    :root {
+        --padding-section: 4rem 1.5rem;
+    }
+
+    .page-header {
+        padding: 10rem 1.5rem 3rem;
+    }
+
+    /* Aperçu : 1 colonne */
+    .apercu-grille {
+        grid-template-columns: 1fr;
+    }
+
+    .apercu-carte--grande {
+        grid-column: auto;
+    }
+
+    .apercu-image,
+    .apercu-carte--grande .apercu-image {
+        height: 300px;
+    }
+
+    /* Citation : plus petite */
+    .citation {
+        padding: 4rem 2rem;
+    }
+
+    .citation::before {
+        font-size: 10rem;
+    }
+
+    /* Galerie : 1 colonne */
+    .galerie-grille {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem 4rem;
+    }
+
+    /* Lightbox */
+    .lightbox {
+        padding: 1rem;
+    }
+
+    .lightbox-prev { left: 0.5rem; }
+    .lightbox-next { right: 0.5rem; }
+
+    /* Filtres */
+    .filtres {
+        padding: 1.5rem 1.5rem 3rem;
+        gap: 0.5rem;
+    }
+
+    /* Footer : tout en colonne */
+    .footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+        padding: 3rem 2rem;
+    }
+
+    .footer-nav,
+    .footer-reseaux {
+        justify-content: center;
+    }
+
+    .footer-copy {
+        grid-column: auto;
+    }
+
+    /* Contact */
+    .contact-section {
+        padding: 1.5rem 1.5rem 4rem;
+    }
+
+    /* À propos */
+    .apropos-principale {
+        padding: 2rem 1.5rem 4rem;
+    }
+
+    .apropos-expositions,
+    .apropos-demarche {
+        padding: 4rem 1.5rem;
+    }
+}
+
+
+/*
+   TRÈS PETIT (écran jusqu'à 480px)
+   Ex: vieux smartphones
+    */
+@media (max-width: 480px) {
+
+    .hero-nom {
+        font-size: clamp(2rem, 15vw, 3.5rem);
+        letter-spacing: 2px;
+    }
+
+    .hero-description {
+        font-size: 0.85rem;
+    }
+
+    .bouton-principal,
+    .bouton-secondaire {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.65rem;
+    }
+
+    .page-titre {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .expo-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}

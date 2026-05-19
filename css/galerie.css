@@ -1,0 +1,241 @@
+/*
+   GALERIE.CSS — Styles spécifiques à la page galerie.html
+   (filtres, grille d'oeuvres, lightbox)
+    */
+
+
+/*
+   FILTRES PAR CATÉGORIE
+   Les boutons "Tout / Peinture / Acrylique..."
+    */
+.filtres {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 6rem 4rem;
+    flex-wrap: wrap; /* Passe à la ligne si pas assez de place */
+}
+
+.filtre-btn {
+    padding: 0.6rem 1.8rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--texte-discret);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+/* Le filtre actif ou survolé passe en doré */
+.filtre-btn:hover,
+.filtre-btn.actif {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+
+/*
+   GRILLE DES OEUVRES
+    */
+.galerie-grille {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+    gap: 3px;                              /* Espace minuscule entre les cartes */
+    padding: 0 6rem 8rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Chaque carte d'oeuvre */
+.galerie-carte {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3/4; /* Format portrait (comme un vrai tableau) */
+}
+
+/* L'image/fond coloré de l'oeuvre */
+.galerie-image {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Overlay qui apparaît au survol */
+.galerie-overlay {
+    position: absolute;
+    inset: 0; /* Couvre toute la carte */
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;            /* Invisible par défaut */
+    transition: var(--transition);
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Au survol : zoom de l'image + apparition de l'overlay */
+.galerie-carte:hover .galerie-image {
+    transform: scale(1.05);
+}
+
+.galerie-carte:hover .galerie-overlay {
+    opacity: 1;
+}
+
+.galerie-carte-titre {
+    font-family: var(--titre);
+    font-size: 1.2rem;
+    color: var(--texte);
+}
+
+.galerie-carte-details {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--texte-discret);
+}
+
+/* Le "+" qui invite à cliquer pour agrandir */
+.galerie-loupe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.galerie-carte:hover .galerie-loupe {
+    background-color: var(--accent);
+    color: var(--fond);
+}
+
+/* Carte masquée par le filtre JS */
+.galerie-carte.masque {
+    display: none;
+}
+
+
+/*
+   LIGHTBOX — Fenêtre qui s'ouvre en grand quand on clique
+    */
+
+/* Fond noir semi-transparent derrière la lightbox */
+.lightbox-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none; /* Non cliquable quand invisible */
+    transition: opacity 0.4s ease;
+}
+
+/* La lightbox elle-même */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 4rem;
+}
+
+/* Quand la lightbox est ouverte (classe ajoutée par JS) */
+.lightbox.ouverte,
+.lightbox-backdrop.ouverte {
+    opacity: 1;
+    pointer-events: all; /* Maintenant cliquable */
+}
+
+/* Le contenu : image + infos */
+.lightbox-contenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 700px;
+    width: 100%;
+}
+
+/* L'image agrandie */
+.lightbox-image {
+    width: 100%;
+    height: 60vh;
+    max-height: 600px;
+}
+
+.lightbox-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lightbox-titre {
+    font-family: var(--titre);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--texte);
+}
+
+.lightbox-details {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--texte-discret);
+}
+
+/* Bouton fermer (croix) */
+.lightbox-fermer {
+    position: absolute;
+    top: 2rem;
+    right: 2.5rem;
+    font-size: 1.5rem;
+    color: var(--texte-discret);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 2002;
+}
+
+.lightbox-fermer:hover {
+    color: var(--accent);
+}
+
+/* Flèches navigation précédent/suivant */
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    color: var(--texte-discret);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 2002;
+    padding: 1rem;
+}
+
+.lightbox-prev { left: 2rem; }
+.lightbox-next { right: 2rem; }
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    color: var(--accent);
+}

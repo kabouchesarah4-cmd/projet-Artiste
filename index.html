@@ -1,29 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artiste Nancy — Œuvres d'art</title>
-
-    <!-- Google Fonts : nos deux polices élégantes -->
+    <title>Kaz Ahmed Koné — Artiste Plasticien · Nancy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <!-- Nos fichiers CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
-
 <body>
 
-<!-- ===== HEADER / NAVIGATION ===== -->
-<header class="header">
+<!-- NAVIGATION -->
+<header class="header" id="header">
     <nav class="nav">
         <div class="nav-logo">
-            <a href="index.html">NOM ARTISTE</a>
+            <a href="index.html">KAZ <span>AHMED KONÉ</span></a>
         </div>
-        <ul class="nav-liens">
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-liens" id="nav-liens">
             <li><a href="index.html" class="actif">Accueil</a></li>
             <li><a href="galerie.html">Galerie</a></li>
             <li><a href="a-propos.html">À propos</a></li>
@@ -32,56 +29,117 @@
     </nav>
 </header>
 
-<!-- ===== HERO (grande image d'accueil) ===== -->
+
+
+
+
 <section class="hero">
+    <div class="hero-overlay"></div>
     <div class="hero-contenu">
-        <h1 class="hero-titre">NOM ARTISTE</h1>
-        <p class="hero-sous-titre">Peintre — Nancy</p>
-        <a href="galerie.html" class="bouton-principal">Découvrir les œuvres</a>
+        <p class="hero-tag">Artiste plasticien · Nancy</p>
+        <h1 class="hero-titre">
+            <span class="hero-prenom">Kaz Ahmed</span>
+            <span class="hero-nom">Koné</span>
+        </h1>
+        <div class="hero-ligne"></div>
+        <p class="hero-description">
+            « Je crois en un art qui ne se contente pas d'être regardé, mais ressenti »
+        </p>
+        <a href="galerie.html" class="bouton-principal">
+            Découvrir les œuvres <span class="bouton-fleche">→</span>
+        </a>
+    </div>
+    <div class="hero-scroll">
+        <span>Défiler</span>
+        <div class="hero-scroll-ligne"></div>
     </div>
 </section>
 
-<!-- ===== APERÇU ŒUVRES ===== -->
+<!-- APERÇU — 3 oeuvres en avant-->
 <section class="apercu-oeuvres">
-    <h2 class="section-titre">Œuvres récentes</h2>
+    <div class="section-header">
+        <span class="section-tag">Sélection</span>
+        <h2 class="section-titre">Œuvres récentes</h2>
+    </div>
     <div class="apercu-grille">
-        <!-- On mettra les vraies images plus tard -->
-        <div class="apercu-carte">
-            <img src="images/oeuvres/oeuvre1.jpg" alt="Titre de l'œuvre 1">
-            <p>Titre œuvre 1</p>
-        </div>
-        <div class="apercu-carte">
-            <img src="images/oeuvres/oeuvre2.jpg" alt="Titre de l'œuvre 2">
-            <p>Titre œuvre 2</p>
-        </div>
-        <div class="apercu-carte">
-            <img src="images/oeuvres/oeuvre3.jpg" alt="Titre de l'œuvre 3">
-            <p>Titre œuvre 3</p>
-        </div>
+
+        <a href="galerie.html" class="apercu-carte">
+            <div class="apercu-image" style="background: linear-gradient(135deg, #1a0000, #8b0000);"></div>
+            <div class="apercu-info">
+                <p class="apercu-titre">Zaouli Funk</p>
+                <p class="apercu-details">Création numérique · 2015–2025</p>
+            </div>
+        </a>
+
+        <a href="galerie.html" class="apercu-carte apercu-carte--grande">
+            <div class="apercu-image" style="background: linear-gradient(135deg, #2a1500, #c9a84c);"></div>
+            <div class="apercu-info">
+                <p class="apercu-titre">Acrylique on kraft</p>
+                <p class="apercu-details">Acrylique sur kraft · A3</p>
+            </div>
+        </a>
+
+        <a href="galerie.html" class="apercu-carte">
+            <div class="apercu-image" style="background: linear-gradient(135deg, #001a1a, #0a4a4a);"></div>
+            <div class="apercu-info">
+                <p class="apercu-titre">Voodoo Child</p>
+                <p class="apercu-details">Création numérique · série</p>
+            </div>
+        </a>
+
     </div>
-    <a href="galerie.html" class="bouton-secondaire">Voir toute la galerie</a>
+    <div class="apercu-footer">
+        <a href="galerie.html" class="bouton-secondaire">Voir toute la galerie</a>
+    </div>
 </section>
 
-<!-- ===== PRÉSENTATION RAPIDE ===== -->
+<!-- citation de l artiste  -->
+<section class="citation">
+    <blockquote>
+        « L'art est ma prière silencieuse, la toile mon sanctuaire. »
+    </blockquote>
+    <cite>— Kaz Ahmed Koné</cite>
+</section>
+
+<!-- PRÉSENTATION RAPIDE-->
 <section class="presentation">
-    <div class="presentation-contenu">
-        <h2>L'artiste</h2>
-        <p>Courte présentation de l'artiste en quelques lignes. Sa démarche, son univers, ce qui le rend unique.</p>
-        <a href="a-propos.html" class="bouton-secondaire">En savoir plus</a>
+    <div class="presentation-image">
+        <img src="images/artiste/portrait-kaz2.jpg" alt="Kaz Ahmed Koné">
+    </div>
+    <div class="presentation-texte">
+        <span class="section-tag">L'artiste</span>
+        <h2>Kaz Ahmed Koné</h2>
+        <p>
+            Né à Nice, bercé par les rythmes ensoleillés de la Côte d'Ivoire des années 80,
+            Kaz Ahmed Koné est un artiste plasticien autodidacte installé à Nancy.
+            Peinture, numérique, upcycling, sculpture — son art pluridisciplinaire
+            est un voyage entre tradition africaine et modernité européenne.
+        </p>
+        <p>
+            Son œuvre invite le spectateur à devenir explorateur de ses textures,
+            contrastes et symboles. Une ode à la diversité et à l'innovation.
+        </p>
+        <a href="a-propos.html" class="bouton-secondaire">Lire la biographie</a>
     </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="footer">
-    <p>© 2025 NOM ARTISTE — Nancy</p>
+    <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
+    <div class="footer-nav">
+        <a href="galerie.html">Galerie</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contact.html">Contact</a>
+    </div>
     <div class="footer-reseaux">
-        <a href="#">Instagram</a>
-        <a href="#">Facebook</a>
+        <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
+        <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
+    </div>
+    <div class="footer-copy">
+        <p>© 2025 Kaz Ahmed Koné · Tous droits réservés</p>
     </div>
 </footer>
 
-<!-- JavaScript en dernier -->
 <script src="js/main.js"></script>
-
 </body>
 </html>

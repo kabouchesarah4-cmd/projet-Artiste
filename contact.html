@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Kaz Ahmed Koné</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header class="header" id="header">
+    <nav class="nav">
+        <div class="nav-logo">
+            <a href="index.html">KAZ <span>AHMED KONÉ</span></a>
+        </div>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-liens" id="nav-liens">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="galerie.html">Galerie</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html" class="actif">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- EN-TÊTE -->
+<div class="page-header">
+    <span class="section-tag">Écrire</span>
+    <h1 class="page-titre">Contact</h1>
+    <p class="page-sous-titre">Pour toute demande d'acquisition, d'exposition ou de collaboration</p>
+</div>
+
+<!-- SECTION CONTACT -->
+<section class="contact-section">
+
+    <!-- COLONNE GAUCHE : infos de Kaz -->
+    <div class="contact-infos">
+
+        <div class="contact-info-item">
+            <span class="contact-info-label">Email</span>
+            <a href="mailto:Ahmed.kone@yahoo.fr" class="contact-info-valeur">
+                Ahmed.kone@yahoo.fr
+            </a>
+        </div>
+
+        <div class="contact-info-item">
+            <span class="contact-info-label">Téléphone</span>
+            <a href="tel:+33682066412" class="contact-info-valeur">
+                +33 (0)6 82 06 64 12
+            </a>
+        </div>
+
+        <div class="contact-info-item">
+            <span class="contact-info-label">Atelier</span>
+            <p class="contact-info-valeur">Nancy, Lorraine<br>France</p>
+        </div>
+
+        <div class="contact-info-item">
+            <span class="contact-info-label">Réseaux</span>
+            <div class="contact-reseaux">
+                <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
+                <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
+                <a href="https://www.facebook.com/share/1CkPAQPLPU/" target="_blank">Facebook</a>
+            </div>
+        </div>
+
+        <!-- Citation de Kaz pour l'ambiance -->
+        <blockquote class="contact-citation">
+            « Je crois en un art qui ne se contente pas
+            d'être regardé, mais ressenti. »
+        </blockquote>
+
+    </div>
+
+    <!-- colonne droite  : formulaire -->
+    <div class="contact-formulaire">
+
+        <!--
+          NOTE PHASE 1 : ce formulaire affiche juste une confirmation visuelle.
+          En Phase 2 avec PHP, oje vais ajouter un vrai envoi d'email.
+          Pour l'instant, je  partage son email directement.
+        -->
+        <form class="formulaire" id="formulaire-contact">
+
+            <div class="champ-groupe">
+                <label for="nom">Nom complet</label>
+                <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+            </div>
+
+            <div class="champ-groupe">
+                <label for="email">Adresse email</label>
+                <input type="email" id="email" name="email" placeholder="votre@email.fr" required>
+            </div>
+
+            <div class="champ-groupe">
+                <label for="sujet">Sujet</label>
+                <select id="sujet" name="sujet">
+                    <option value="">Choisir un sujet...</option>
+                    <option value="acquisition">Acquisition d'une œuvre</option>
+                    <option value="exposition">Proposition d'exposition</option>
+                    <option value="collaboration">Collaboration artistique</option>
+                    <option value="presse">Presse / Médias</option>
+                    <option value="autre">Autre demande</option>
+                </select>
+            </div>
+
+            <div class="champ-groupe">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="6"
+                          placeholder="Votre message..." required></textarea>
+            </div>
+
+            <button type="submit" class="bouton-principal">
+                Envoyer le message <span class="bouton-fleche">→</span>
+            </button>
+
+            <!-- Affiché par JS après soumission -->
+            <div class="formulaire-confirmation" id="formulaire-confirmation">
+                ✓ Message envoyé ! Kaz vous répondra dans les plus brefs délais.
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
+    <div class="footer-nav">
+        <a href="galerie.html">Galerie</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-reseaux">
+        <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
+        <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
+    </div>
+    <div class="footer-copy">
+        <p>© 2025 Kaz Ahmed Koné · Tous droits réservés</p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,283 +1,946 @@
-/* ============================================
-   VARIABLES — La charte graphique du site
-   Changer une couleur ici = ça change partout
-   ============================================ */
+/*
+   STYLE.CSS — Styles principaux du site
+
+   l'Organisation globale que j'ai pu finaliser pour ce fichier  :
+   1. Variables (couleurs, polices)
+   2. Reset (repart d'une base propre)
+   3. Navigation
+   4. Éléments communs (boutons, titres de section...)
+   5. Page d'accueil (hero, aperçu, citation, présentation)
+   6. Pages intérieures (page-header)
+   7. Page À propos
+   8. Page Contact
+   9. Footer
+    */
+
+
+/*
+   1. VARIABLES
+   Je définis tout ici → si je veux changer une couleur,
+   je la change à un seul endroit et ça s'applique partout( better than faire pour chaque )
+    */
 :root {
-    --couleur-fond: #0a0a0a;
-    --couleur-fond-secondaire: #1a1a1a;
-    --couleur-texte: #f5f5f0;
-    --couleur-texte-discret: #888888;
-    --couleur-accent: #c9a84c;
-    --police-titre: 'Playfair Display', serif;
-    --police-corps: 'Inter', sans-serif;
-    --transition: all 0.3s ease;
+    /* Couleurs */
+    --fond:             #080808;   /* Noir très profond (fond principal) */
+    --fond-secondaire:  #111111;   /* Noir légèrement plus clair */
+    --fond-carte:       #161616;   /* Pour les cartes et sections */
+    --texte:            #f0ede8;   /* Blanc cassé (plus doux que blanc pur) */
+    --texte-discret:    #666666;   /* Gris pour les détails, labels */
+    --texte-moyen:      #999999;   /* Gris moyen */
+    --accent:           #c9a84c;   /* Doré — la couleur signature */
+    --accent-hover:     #e0c06a;   /* Doré plus clair au survol */
+    --bordure:          rgba(201, 168, 76, 0.15); /* Bordure dorée très subtile */
+
+    /* Polices */
+    --titre:  'Playfair Display', Georgia, serif;  /* Élégant, pour les titres */
+    --corps:  'Cormorant Garamond', Georgia, serif; /* Raffiné, pour le texte */
+
+    /* Transitions (animations au survol) */
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Espacements */
+    --padding-section: 8rem 6rem;
+    --max-largeur: 1300px;
 }
 
-/* ============================================
-   RESET — Efface les styles par défaut
-   du navigateur pour partir d'une base propre
-   ============================================ */
-* {
+
+/*
+   2. RESET
+   Le navigateur applique des styles par défaut (marges, etc.)
+   On les efface tous pour partir d'une base propre
+    */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Le padding ne "gonfle" plus la taille des éléments */
 }
 
 html {
-    scroll-behavior: smooth; /* Défilement fluide */
+    scroll-behavior: smooth; /* Défilement fluide quand on clique sur un ancre */
+    font-size: 16px;
 }
 
 body {
-    background-color: var(--couleur-fond);
-    color: var(--couleur-texte);
-    font-family: var(--police-corps);
+    background-color: var(--fond);
+    color: var(--texte);
+    font-family: var(--corps);
     font-weight: 300;
-    line-height: 1.6;
+    line-height: 1.7;
+    overflow-x: hidden; /* Évite le scroll horizontal accidentel */
 }
 
-/* ============================================
-   NAVIGATION
-   ============================================ */
+img {
+    max-width: 100%;    /* Les images ne dépassent jamais leur conteneur */
+    display: block;
+}
+
+a {
+    color: inherit;        /* Les liens héritent la couleur du parent */
+    text-decoration: none; /* Pas de soulignement par défaut */
+}
+
+ul {
+    list-style: none; /* Pas de puces */
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+input, textarea, select {
+    font-family: inherit;
+}
+
+
+/*
+   3. NAVIGATION
+   Fixed = reste en haut même quand on scroll
+    */
 .header {
-    position: fixed;        /* Reste en haut même quand on scroll */
+    position: fixed;   /* Collée en haut de l'écran */
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;          /* Au dessus de tout le reste */
-    padding: 1.5rem 4rem;
-    background: rgba(10, 10, 10, 0.9);  /* Légèrement transparent */
-    backdrop-filter: blur(10px);         /* Effet flou derrière */
-    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    z-index: 1000;     /* Au-dessus de tout le reste */
+    padding: 1.8rem 5rem;
+
+    /* Transition pour l'effet "scrollé" ajouté par JS */
+    transition: var(--transition);
+}
+
+/* Classe ajoutée par JS quand on scroll → fond semi-transparent */
+.header.scrolle {
+    background: rgba(8, 8, 8, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 1.2rem 5rem;
+    border-bottom: 1px solid var(--bordure);
 }
 
 .nav {
-    display: flex;                    /* Les éléments côte à côte */
-    justify-content: space-between;   /* Logo à gauche, liens à droite */
-    align-items: center;              /* Centré verticalement */
-    max-width: 1200px;
-    margin: 0 auto;                   /* Centré horizontalement */
+    display: flex;              /* Logo et liens côte à côte */
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-largeur);
+    margin: 0 auto;            /* Centré dans la page */
 }
 
+/* Logo (nom de l'artiste) */
 .nav-logo a {
-    font-family: var(--police-titre);
-    font-size: 1.4rem;
-    color: var(--couleur-accent);
-    text-decoration: none;
-    letter-spacing: 2px;
+    font-family: var(--titre);
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    color: var(--texte);
+    transition: var(--transition);
 }
 
+/* Le prénom en doré dans le logo */
+.nav-logo a span {
+    color: var(--accent);
+}
+
+.nav-logo a:hover {
+    color: var(--accent);
+}
+
+/* Les liens de navigation */
 .nav-liens {
-    list-style: none;   /* Enlève les puces */
     display: flex;
-    gap: 3rem;          /* Espace entre les liens */
+    gap: 3.5rem;
 }
 
 .nav-liens a {
-    color: var(--couleur-texte);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 1.5px;
+    font-family: var(--corps);
+    font-size: 0.75rem;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
+    color: var(--texte-moyen);
+    transition: var(--transition);
+    position: relative; /* Pour le trait doré sous le lien actif */
+}
+
+/* Trait doré sous le lien actif ou survolé */
+.nav-liens a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--accent);
     transition: var(--transition);
 }
 
 .nav-liens a:hover,
 .nav-liens a.actif {
-    color: var(--couleur-accent);  /* Doré au survol */
+    color: var(--accent);
 }
 
-/* ============================================
-   HERO — Grande image plein écran
-   ============================================ */
+.nav-liens a:hover::after,
+.nav-liens a.actif::after {
+    width: 100%; /* Le trait s'étend en pleine largeur */
+}
+
+/* Bouton hamburger (visible seulement sur mobile via responsive.css) */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background-color: var(--texte);
+    transition: var(--transition);
+}
+
+
+/*
+   4. ÉLÉMENTS commus
+   Réutilisés sur plusieurs pages
+    */
+
+/* Petit tag au-dessus des titres de section */
+.section-tag {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+/* Titre de section standard */
+.section-titre {
+    font-family: var(--titre);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 400;
+    color: var(--texte);
+    line-height: 1.2;
+}
+
+/* Header des sections (tag + titre centrés) */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+/* Bouton principal (bordure dorée) */
+.bouton-principal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.bouton-principal:hover {
+    background-color: var(--accent);
+    color: var(--fond);
+}
+
+/* Bouton secondaire (bordure grise) */
+.bouton-secondaire {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--texte-discret);
+    color: var(--texte-moyen);
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.bouton-secondaire:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.bouton-fleche {
+    transition: var(--transition);
+}
+
+.bouton-principal:hover .bouton-fleche,
+.bouton-secondaire:hover .bouton-fleche {
+    transform: translateX(4px); /* La flèche glisse vers la droite au survol */
+}
+
+/* En-tête des pages intérieures (galerie, à propos, contact) */
+.page-header {
+    padding: 14rem 6rem 5rem;
+    max-width: var(--max-largeur);
+    margin: 0 auto;
+}
+
+.page-titre {
+    font-family: var(--titre);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+
+.page-sous-titre {
+    color: var(--texte-discret);
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+
+/*
+   5. PAGE D'ACCUEIL
+    */
+
+/* --- HERO --- */
 .hero {
-    min-height: 100vh;        /* 100% de la hauteur de l'écran */
+    position: relative;
+    min-height: 100vh;      /* Prend toute la hauteur de l'écran */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: var(--couleur-fond);
-    /* On ajoutera une vraie image de fond plus tard */
-    background-image: linear-gradient(
-            rgba(0,0,0,0.6),
-            rgba(0,0,0,0.6)
+    overflow: hidden;
+
+    /* Fond dégradé en attendant la vraie image de l'artiste */
+    background: linear-gradient(
+            160deg,
+            #0a0a0a 0%,
+            #111111 50%,
+            #0d0d0d 100%
     );
-    padding: 2rem;
+}
+
+/* Texture grain par-dessus le hero */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%);
 }
 
 .hero-contenu {
+    position: relative; /* Au-dessus de l'overlay */
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
+    padding: 2rem;
+}
+
+.hero-tag {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
 }
 
 .hero-titre {
-    font-family: var(--police-titre);
-    font-size: clamp(3rem, 8vw, 7rem); /* S'adapte à la taille d'écran */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--titre);
     font-weight: 400;
+    line-height: 1;
+}
+
+.hero-prenom {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-style: italic;
+    color: var(--texte-moyen);
     letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--couleur-texte);
 }
 
-.hero-sous-titre {
+.hero-nom {
+    font-size: clamp(4rem, 10vw, 10rem);
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: var(--texte);
+}
+
+/* Petite ligne dorée de séparation */
+.hero-ligne {
+    width: 40px;
+    height: 1px;
+    background-color: var(--accent);
+    margin: 0.5rem 0;
+}
+
+.hero-description {
     font-size: 1rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--couleur-accent);
-}
-
-/* ============================================
-   BOUTONS
-   ============================================ */
-.bouton-principal {
-    display: inline-block;
-    padding: 1rem 2.5rem;
-    border: 1px solid var(--couleur-accent);
-    color: var(--couleur-accent);
-    text-decoration: none;
-    font-size: 0.8rem;
     letter-spacing: 2px;
+    color: var(--texte-discret);
+    max-width: 400px;
+}
+
+/* Indicateur de scroll en bas du hero */
+.hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hero-scroll span {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    transition: var(--transition);
-    margin-top: 1rem;
+    color: var(--texte-discret);
 }
 
-.bouton-principal:hover {
-    background-color: var(--couleur-accent);
-    color: var(--couleur-fond);
+.hero-scroll-ligne {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
 }
 
-.bouton-secondaire {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    border: 1px solid var(--couleur-texte-discret);
-    color: var(--couleur-texte);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: var(--transition);
-    margin-top: 2rem;
+@keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.1); }
 }
 
-.bouton-secondaire:hover {
-    border-color: var(--couleur-accent);
-    color: var(--couleur-accent);
-}
-
-/* ============================================
-   SECTIONS GÉNÉRALES
-   ============================================ */
-.section-titre {
-    font-family: var(--police-titre);
-    font-size: 2rem;
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 3rem;
-    color: var(--couleur-texte);
-}
-
-/* ============================================
-   APERÇU ŒUVRES (page accueil)
-   ============================================ */
+/* --- APERÇU ŒUVRES (section accueil) --- */
 .apercu-oeuvres {
-    padding: 6rem 4rem;
-    background-color: var(--couleur-fond-secondaire);
-    text-align: center;
+    padding: var(--padding-section);
+    background-color: var(--fond-secondaire);
 }
 
 .apercu-grille {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    /* Grille asymétrique : la carte du milieu est plus grande */
+    grid-template-columns: 1fr 1.3fr 1fr;
+    grid-template-rows: auto;
+    gap: 2px;             /* Espace minuscule entre les cartes */
+    max-width: var(--max-largeur);
+    margin: 0 auto 3rem;
 }
 
 .apercu-carte {
+    position: relative;
     overflow: hidden;
-    cursor: pointer;
+    display: block;
 }
 
-.apercu-carte img {
+/* L'image de l'oeuvre (div colorée en attendant les vraies photos) */
+.apercu-image {
     width: 100%;
-    height: 350px;
-    object-fit: cover;      /* L'image remplit sans se déformer */
+    height: 450px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* La carte du milieu est plus haute */
+.apercu-carte--grande .apercu-image {
+    height: 550px;
+}
+
+/* Overlay sombre au bas de la carte avec les infos */
+.apercu-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 1.5rem 1.5rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    transform: translateY(100%); /* Caché par défaut */
     transition: var(--transition);
-    filter: brightness(0.85);
 }
 
-.apercu-carte img:hover {
-    transform: scale(1.03); /* Zoom léger au survol */
-    filter: brightness(1);
+.apercu-titre {
+    font-family: var(--titre);
+    font-size: 1.1rem;
+    color: var(--texte);
+    margin-bottom: 0.3rem;
 }
 
-.apercu-carte p {
-    margin-top: 1rem;
-    font-size: 0.85rem;
+.apercu-details {
+    font-size: 0.75rem;
     letter-spacing: 1px;
-    color: var(--couleur-texte-discret);
-    text-transform: uppercase;
+    color: var(--texte-discret);
 }
 
-/* ============================================
-   PRÉSENTATION ARTISTE (page accueil)
-   ============================================ */
-.presentation {
-    padding: 6rem 4rem;
+/* Au survol : zoom de l'image + apparition des infos */
+.apercu-carte:hover .apercu-image {
+    transform: scale(1.04);
+}
+
+.apercu-carte:hover .apercu-info {
+    transform: translateY(0);
+}
+
+.apercu-footer {
     text-align: center;
+    margin-top: 3rem;
 }
 
-.presentation-contenu {
-    max-width: 600px;
+/* --- CITATION --- */
+.citation {
+    padding: 7rem 6rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Guillemets géants décoratifs en fond */
+.citation::before {
+    content: '❝';
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20rem;
+    color: rgba(201, 168, 76, 0.04);
+    font-family: var(--titre);
+    pointer-events: none;
+}
+
+.citation blockquote {
+    font-family: var(--titre);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--texte);
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+.citation cite {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-style: normal;
+}
+
+/* --- PRÉSENTATION ARTISTE (section accueil) --- */
+.presentation {
+    padding: var(--padding-section);
+    background-color: var(--fond-secondaire);
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes : photo + texte */
+    gap: 8rem;
+    align-items: center;
+    max-width: var(--max-largeur);
     margin: 0 auto;
 }
 
-.presentation-contenu h2 {
-    font-family: var(--police-titre);
-    font-size: 2rem;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
+/* Placeholder de la photo (que je vais remplacer par une vraie img plus tard) */
+.presentation-photo-placeholder {
+    width: 100%;
+    padding-bottom: 120%; /* Ratio portrait */
+    background: linear-gradient(160deg, var(--fond-carte), #1a1a1a);
+    border: 1px solid var(--bordure);
 }
 
-.presentation-contenu p {
-    color: var(--couleur-texte-discret);
-    line-height: 1.8;
-}
-
-/* ============================================
-   FOOTER
-   ============================================ */
-.footer {
-    padding: 3rem 4rem;
-    background-color: var(--couleur-fond-secondaire);
+.presentation-texte {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(201, 168, 76, 0.2);
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.footer p {
+.presentation-texte h2 {
+    font-family: var(--titre);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+}
+
+.presentation-texte p {
+    color: var(--texte-discret);
+    line-height: 1.9;
+    font-size: 1.05rem;
+}
+
+
+/*
+   6. PAGE À PROPOS
+    */
+.apropos-principale {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: start;
+    padding: 4rem 6rem 8rem;
+    max-width: var(--max-largeur);
+    margin: 0 auto;
+}
+
+/* Wrapper de la photo avec le cadre doré décalé derrière */
+.apropos-photo-wrapper {
+    position: relative;
+}
+
+.apropos-photo-placeholder {
+    width: 100%;
+    padding-bottom: 130%;
+    background: linear-gradient(160deg, #1a1a1a, #222222);
+    border: 1px solid var(--bordure);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.apropos-photo-placeholder span {
+    color: var(--texte-discret);
     font-size: 0.8rem;
-    color: var(--couleur-texte-discret);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Cadre doré décoratif décalé en bas à droite */
+.apropos-photo-cadre {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--accent);
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.apropos-texte {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 2rem;
+}
+
+.apropos-texte h2 {
+    font-family: var(--titre);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+}
+
+.apropos-accroche {
+    font-size: 1.1rem;
+    color: var(--accent);
     letter-spacing: 1px;
+}
+
+.apropos-texte p {
+    color: var(--texte-discret);
+    line-height: 1.9;
+    font-size: 1.05rem;
+}
+
+/* Démarche artistique */
+.apropos-demarche {
+    background-color: var(--fond-secondaire);
+    padding: var(--padding-section);
+}
+
+.apropos-demarche-contenu {
+    max-width: 750px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.apropos-demarche-contenu h2 {
+    font-family: var(--titre);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 400;
+}
+
+.apropos-demarche-contenu p {
+    color: var(--texte-discret);
+    line-height: 1.9;
+    font-size: 1.05rem;
+}
+
+/* Liste des expositions */
+.apropos-expositions {
+    padding: var(--padding-section);
+    max-width: var(--max-largeur);
+    margin: 0 auto;
+}
+
+.expositions-liste {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* Pas d'espace, les bordures se touchent */
+}
+
+.expo-item {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: var(--transition);
+}
+
+.expo-item:hover {
+    padding-left: 1rem; /* Légère indentation au survol */
+}
+
+.expo-annee {
+    font-family: var(--titre);
+    font-size: 1.3rem;
+    color: var(--accent);
+    min-width: 60px;
+    font-style: italic;
+}
+
+.expo-titre {
+    font-size: 1rem;
+    color: var(--texte);
+    margin-bottom: 0.3rem;
+}
+
+.expo-lieu {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--texte-discret);
+}
+
+
+/*
+   7. PAGE CONTACT
+    */
+.contact-section {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr; /* Infos + formulaire */
+    gap: 8rem;
+    padding: 2rem 6rem 8rem;
+    max-width: var(--max-largeur);
+    margin: 0 auto;
+}
+
+.contact-infos {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding-top: 1rem;
+}
+
+.contact-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-info-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.contact-info-valeur {
+    font-size: 1rem;
+    color: var(--texte-discret);
+    line-height: 1.6;
+    transition: var(--transition);
+}
+
+a.contact-info-valeur:hover {
+    color: var(--accent);
+}
+
+.contact-reseaux {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.contact-reseaux a {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--texte-discret);
+    transition: var(--transition);
+}
+
+.contact-reseaux a:hover {
+    color: var(--accent);
+}
+
+.contact-citation {
+    font-family: var(--titre);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--texte-discret);
+    line-height: 1.7;
+    border-left: 1px solid var(--accent);
+    padding-left: 1.5rem;
+    margin-top: auto;
+}
+
+/* Formulaire */
+.formulaire {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.champ-groupe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.champ-groupe label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+/* Style commun aux inputs, textarea et select */
+.champ-groupe input,
+.champ-groupe textarea,
+.champ-groupe select {
+    background: var(--fond-carte);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--texte);
+    padding: 1rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 300;
+    outline: none;
+    transition: var(--transition);
+    appearance: none; /* Retire le style par défaut du navigateur */
+}
+
+/* Bordure dorée quand on clique dans le champ */
+.champ-groupe input:focus,
+.champ-groupe textarea:focus,
+.champ-groupe select:focus {
+    border-color: var(--accent);
+}
+
+/* Texte placeholder (ce qui est écrit avant de taper) */
+.champ-groupe input::placeholder,
+.champ-groupe textarea::placeholder {
+    color: var(--texte-discret);
+    font-size: 0.9rem;
+}
+
+.champ-groupe textarea {
+    resize: vertical; /* On peut agrandir verticalement mais pas horizontalement */
+    min-height: 150px;
+}
+
+.champ-groupe select option {
+    background-color: var(--fond-carte);
+}
+
+/* Message de confirmation (caché par défaut) */
+.formulaire-confirmation {
+    display: none;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+/* Affiché par JS quand le formulaire est soumis */
+.formulaire-confirmation.visible {
+    display: block;
+}
+
+
+/*
+   8. FOOTER
+    */
+.footer {
+    padding: 4rem 6rem;
+    background-color: var(--fond-secondaire);
+    border-top: 1px solid var(--bordure);
+    display: grid;
+    grid-template-columns: 1fr auto auto 1fr;
+    align-items: center;
+    gap: 3rem;
+}
+
+.footer-logo {
+    font-family: var(--titre);
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    color: var(--texte-moyen);
+}
+
+.footer-logo span {
+    color: var(--accent);
+}
+
+.footer-nav {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.footer-nav a {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--texte-discret);
+    transition: var(--transition);
+}
+
+.footer-nav a:hover {
+    color: var(--accent);
 }
 
 .footer-reseaux {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .footer-reseaux a {
-    color: var(--couleur-texte-discret);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    color: var(--texte-discret);
     transition: var(--transition);
 }
 
 .footer-reseaux a:hover {
-    color: var(--couleur-accent);
+    color: var(--accent);
+}
+
+.footer-copy {
+    text-align: right;
+}
+
+.footer-copy p {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--texte-discret);
 }
