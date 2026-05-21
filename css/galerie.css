@@ -239,3 +239,16 @@
 .lightbox-next:hover {
     color: var(--accent);
 }
+
+.badge-vendu {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #8b0000;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: 'Playfair Display', serif;
+    z-index: 2;
+    letter-spacing: 1px;
+}
