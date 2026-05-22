@@ -57,7 +57,7 @@ try {
             <li><a href="index.html">Accueil</a></li>
             <li><a href="galerie.php" class="actif">Galerie</a></li>
             <li><a href="a-propos.html">À propos</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
 </header>
@@ -106,10 +106,12 @@ try {
         }
         ?>
 
-        <div class="galerie-carte"
-             data-categorie="<?php echo htmlspecialchars($cat); ?>"
-             data-titre="<?php echo htmlspecialchars($oeuvre['titre']); ?>"
-             data-details="<?php echo $details; ?>">
+        <a href="fiche-produit.php?id=<?php echo $oeuvre['id']; ?>"
+           class="galerie-carte"
+           style="text-decoration: none; color: inherit; display: block;"
+           data-categorie="<?php echo htmlspecialchars($cat); ?>"
+           data-titre="<?php echo htmlspecialchars($oeuvre['titre']); ?>"
+           data-details="<?php echo $details; ?>">
 
             <?php
             // VÉRIFICATION DE SÉCURITÉ DU FICHIER IMAGE :
@@ -134,44 +136,35 @@ try {
                 <span class="galerie-loupe">+</span>
             </div>
 
-        </div>
+        </a>
 
     <?php endforeach; ?>
 
 </main>
-
-<div class="lightbox" id="lightbox">
-    <button class="lightbox-fermer" id="lightbox-fermer">✕</button>
-    <button class="lightbox-prev" id="lightbox-prev">‹</button>
-    <button class="lightbox-next" id="lightbox-next">›</button>
-    <div class="lightbox-contenu">
-        <div class="lightbox-image" id="lightbox-image"></div>
-        <div class="lightbox-info">
-            <p class="lightbox-titre" id="lightbox-titre"></p>
-            <p class="lightbox-details" id="lightbox-details"></p>
-        </div>
-    </div>
-</div>
-<div class="lightbox-backdrop" id="lightbox-backdrop"></div>
 
 <footer class="footer">
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
         <a href="galerie.php">Galerie</a>
         <a href="a-propos.html">À propos</a>
-        <a href="contact.html">Contact</a>
+        <a href="contact.php">Contact</a>
     </div>
     <div class="footer-reseaux">
         <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
         <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
     </div>
-    <div class="footer-copy">
-        <p>© 2025 Kaz Ahmed Koné · Tous droits réservés</p>
+    <div class="footer-copy" style="min-width: 250px;">
+        <p>© 2026 Kaz Ahmed Koné · Tous droits réservés</p>
+        <p style="margin-top: 0.8rem; font-size: 0.7rem; line-height: 1.6;">
+            Design & Développement par <br>
+            <a href="https://www.linkedin.com/in/sarah-kabouche-2004263a2/" target="_blank" style="color: var(--accent); transition: var(--transition); white-space: nowrap;">Sara Kabouche</a>
+            <span style="color: var(--texte-discret); margin: 0 5px;">|</span>
+            <a href="https://github.com/kabouchesarah4-cmd" target="_blank" style="color: var(--texte-discret); transition: var(--transition);">GitHub</a>
+        </p>
     </div>
 </footer>
 
 <script src="js/main.js"></script>
-<script src="js/lightbox.js"></script>
 
 </body>
 </html>

@@ -251,6 +251,13 @@
     .apropos-demarche {
         padding: 4rem 1.5rem;
     }
+
+    /* fiche produit mobile */
+    .fiche-section {
+        grid-template-columns: 1fr;
+        padding: 8rem 1.5rem 4rem;
+        gap: 2rem;
+    }
 }
 
 

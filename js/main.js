@@ -160,3 +160,33 @@ document.querySelectorAll('a, button').forEach(function(el) {
         curseur.style.opacity   = '1';
     });
 });
+
+/* ============================================================
+   FILTRES DE LA GALERIE
+   ============================================================ */
+const boutonsFiltre = document.querySelectorAll('.filtre-btn');
+const cartesGalerie = document.querySelectorAll('.galerie-carte');
+
+if (boutonsFiltre.length > 0 && cartesGalerie.length > 0) {
+    boutonsFiltre.forEach(bouton => {
+        bouton.addEventListener('click', () => {
+            // 1. On gère l'apparence des boutons (le bouton cliqué devient actif)
+            boutonsFiltre.forEach(btn => btn.classList.remove('actif'));
+            bouton.classList.add('actif');
+
+            // 2. On récupère la catégorie cliquée
+            const filtreDemande = bouton.getAttribute('data-filtre');
+
+            // 3. On affiche ou masque les cartes
+            cartesGalerie.forEach(carte => {
+                const categorieCarte = carte.getAttribute('data-categorie');
+
+                if (filtreDemande === 'tout' || filtreDemande === categorieCarte) {
+                    carte.style.display = 'block';
+                } else {
+                    carte.style.display = 'none';
+                }
+            });
+        });
+    });
+}
