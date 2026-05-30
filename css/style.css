@@ -1202,3 +1202,55 @@ a.contact-info-valeur:hover {
 .fiche-retour:hover {
     color: var(--accent);
 }
+
+
+
+
+
+
+
+/* Fix footer — toujours affiché en bas */
+
+.footer {
+    padding: 4rem 6rem;
+    background-color: var(--fond-secondaire);
+    border-top: 1px solid var(--bordure);
+    display: grid;
+    grid-template-columns: 1fr auto auto 1fr;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* si le footer est caché c'est souvent un z-index ou overflow:hidden parent */
+body {
+    overflow-x: hidden;  /* seulement horizontal, pas vertical */
+}
+
+/* footer responsive */
+@media (max-width: 1024px) {
+    .footer {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 3rem;
+    }
+    .footer-copy {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+        padding: 3rem 2rem;
+    }
+    .footer-nav,
+    .footer-reseaux {
+        justify-content: center;
+    }
+    .footer-copy {
+        grid-column: auto;
+    }
+}
