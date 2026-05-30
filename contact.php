@@ -8,13 +8,13 @@ require_once 'config/database.php';
 
 // 2. INITIALISATION DES VARIABLES D'ÉTAT
 // Permet d'éviter les erreurs "Variable undefined" lors du premier chargement de la page.
-$message_succes = '';
-$message_erreur = '';
+$message_succes  = '';
+$message_erreur  = '';
 $sujet_predefini = '';
-$nom = '';
-$email = '';
-$sujet = '';
-$message = '';
+$nom             = '';
+$email           = '';
+$sujet           = '';
+$message         = '';
 
 // 3. LOGIQUE MÉTIER : INTERCEPTION DES PARAMÈTRES URL (UX / Pré-remplissage)
 // Si le visiteur arrive depuis le bouton "Demander l'acquisition" d'une fiche produit,
@@ -29,14 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // SÉCURITÉ ANTI-FAILLE XSS (Cross-Site Scripting) :
     // trim() supprime les espaces inutiles au début et à la fin.
-    // htmlspecialchars() neutralise les balises HTML/Script injectées par un utilisateur malveillant.
-    $nom = trim(htmlspecialchars($_POST['nom'] ?? ''));
-    $sujet = trim(htmlspecialchars($_POST['sujet'] ?? ''));
-    $message = trim(htmlspecialchars($_POST['message'] ?? ''));
+    // CORRECTION : on utilise trim() seulement ici — PAS htmlspecialchars() sur les données POST.
+    // htmlspecialchars() sera appliqué UNIQUEMENT à l'affichage (dans le HTML).
+    // L'appliquer ici transformait les apostrophes en &#039; dans la BDD et dans le select.
+    $nom     = trim($_POST['nom']     ?? '');
+    $sujet   = trim($_POST['sujet']   ?? '');
+    $message = trim($_POST['message'] ?? '');
 
     // SÉCURITÉ ET NETTOYAGE DE L'EMAIL :
     // FILTER_SANITIZE_EMAIL supprime les caractères illégaux d'une adresse email.
-    $email = trim(filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL));
+    $email   = trim(filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL));
 
     // VALIDATION DES DONNÉES (Logique de contrôle côté serveur)
     if (empty($nom) || empty($email) || empty($message)) {
@@ -48,17 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // SÉCURITÉ ANTI-INJECTION SQL (Requête préparée) :
         // On ne concatène JAMAIS les variables dans la chaîne SQL. On utilise des marqueurs (?).
+        // PDO gère lui-même l'échappement des données — pas besoin de htmlspecialchars() avant.
         try {
             $stmt = $pdo->prepare("
-                INSERT INTO messages_contact (nom, email, sujet, message) 
+                INSERT INTO messages_contact (nom, email, sujet, message)
                 VALUES (?, ?, ?, ?)
             ");
 
-            // L'exécution lie les données nettoyées aux marqueurs de manière totalement sécurisée.
+            // L'exécution lie les données brutes aux marqueurs de manière totalement sécurisée.
             $stmt->execute([$nom, $email, $sujet, $message]);
 
             // Notification de succès pour l'utilisateur
-            $message_succes = "Merci $nom. Votre message a bien été transmis à l'artiste.";
+            $message_succes = "Merci " . htmlspecialchars($nom) . " ! Votre message a bien été transmis à Kaz Ahmed Koné.";
 
             // RÉINITIALISATION DES CHAMPS : On vide le formulaire pour éviter un double envoi au rafraîchissement
             $nom = $email = $sujet = $message = $sujet_predefini = '';
@@ -87,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+<!-- navigation -->
 <header class="header" id="header">
     <nav class="nav">
         <div class="nav-logo">
@@ -104,43 +108,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </nav>
 </header>
 
+<!-- titre de la page -->
 <div class="page-header">
-    <span class="section-tag">Échanger</span>
+    <span class="section-tag">Écrire</span>
     <h1 class="page-titre">Contact</h1>
-    <p class="page-sous-titre">Demandes d'acquisition, collaborations ou expositions.</p>
+    <p class="page-sous-titre">Pour toute demande d'acquisition, d'exposition ou de collaboration</p>
 </div>
 
-<main class="contact-section">
+<!-- infos + formulaire -->
+<section class="contact-section">
+
+    <!-- colonne gauche : infos de Kaz -->
     <div class="contact-infos">
+
         <div class="contact-info-item">
-            <span class="contact-info-label">Atelier (Sur rendez-vous)</span>
-            <span class="contact-info-valeur">Nancy, France</span>
-        </div>
-        <div class="contact-info-item">
-            <span class="contact-info-label">Email professionnel</span>
-            <a href="mailto:contact@kazahmedkone.fr" class="contact-info-valeur">contact@kazahmedkone.fr</a>
+            <span class="contact-info-label">Email</span>
+            <a href="mailto:Ahmed.kone@yahoo.fr" class="contact-info-valeur">
+                Ahmed.kone@yahoo.fr
+            </a>
         </div>
 
-        <div class="contact-reseaux" style="margin-top: 1rem;">
-            <a href="https://instagram.com/kazahmedkone" target="_blank">Instagram Artiste</a>
-            <a href="https://instagram.com/artpapakaz" target="_blank">Instagram Projets</a>
+        <div class="contact-info-item">
+            <span class="contact-info-label">Téléphone</span>
+            <a href="tel:+33782066412" class="contact-info-valeur">
+                +33 (0)7 82 06 64 12
+            </a>
         </div>
 
-        <p class="contact-citation">
-            "L'art est un pont entre celui qui crée et celui qui regarde. Écrivez-moi pour traverser ce pont."
-        </p>
+        <div class="contact-info-item">
+            <span class="contact-info-label">Atelier</span>
+            <p class="contact-info-valeur">Nancy, Lorraine<br>France</p>
+        </div>
+
+        <div class="contact-info-item">
+            <span class="contact-info-label">Réseaux</span>
+            <div class="contact-reseaux">
+                <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
+                <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
+                <a href="https://www.facebook.com/share/1CkPAQPLPU/" target="_blank">Facebook</a>
+            </div>
+        </div>
+
+        <blockquote class="contact-citation">
+            « Je crois en un art qui ne se contente pas
+            d'être regardé, mais ressenti. »
+        </blockquote>
+
     </div>
 
-    <div>
+    <!-- colonne droite : formulaire -->
+    <div class="contact-formulaire">
+
+        <!-- message erreur -->
         <?php if (!empty($message_erreur)): ?>
-            <div style="background: rgba(139, 0, 0, 0.1); border: 1px solid #8b0000; color: #ff6b6b; padding: 1rem; margin-bottom: 2rem; font-size: 0.9rem;">
-                <?php echo $message_erreur; ?>
+            <div class="formulaire-erreur">
+                <?php echo htmlspecialchars($message_erreur); ?>
             </div>
         <?php endif; ?>
 
+        <!-- message succès -->
         <?php if (!empty($message_succes)): ?>
-            <div style="background: rgba(76, 175, 80, 0.1); border: 1px solid #4caf50; color: #81c784; padding: 1rem; margin-bottom: 2rem; font-size: 0.9rem;">
-                <?php echo $message_succes; ?>
+            <div class="formulaire-confirmation visible">
+                ✓ <?php echo $message_succes; ?>
             </div>
         <?php endif; ?>
 
@@ -148,31 +177,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="champ-groupe">
                 <label for="nom">Nom complet *</label>
-                <input type="text" id="nom" name="nom" required value="<?php echo htmlspecialchars($nom); ?>" placeholder="Votre nom">
+                <!-- htmlspecialchars() ici à l'AFFICHAGE : protège contre XSS dans l'attribut value -->
+                <input type="text" id="nom" name="nom" required
+                       placeholder="Votre nom"
+                       value="<?php echo htmlspecialchars($nom); ?>">
             </div>
 
             <div class="champ-groupe">
-                <label for="email">Adresse Email *</label>
-                <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($email); ?>" placeholder="votre@email.com">
+                <label for="email">Adresse email *</label>
+                <input type="email" id="email" name="email" required
+                       placeholder="votre@email.fr"
+                       value="<?php echo htmlspecialchars($email); ?>">
+            </div>
+
+            <!-- select type de message
+                 Les valeurs des options sont des chaînes statiques — pas de htmlspecialchars() nécessaire.
+                 htmlspecialchars() est utilisé uniquement sur $sujet (variable PHP) pour la comparaison. -->
+            <div class="champ-groupe">
+                <label for="sujet">Sujet</label>
+                <select id="sujet" name="sujet">
+                    <option value="">Choisir un sujet...</option>
+                    <option value="Acquisition d'une œuvre"
+                            <?php echo $sujet === "Acquisition d'une œuvre" || str_contains($sujet_predefini, 'Acquisition') ? 'selected' : ''; ?>>
+                        Acquisition d'une œuvre
+                    </option>
+                    <option value="Proposition d'exposition"
+                            <?php echo $sujet === "Proposition d'exposition" ? 'selected' : ''; ?>>
+                        Proposition d'exposition
+                    </option>
+                    <option value="Collaboration artistique"
+                            <?php echo $sujet === "Collaboration artistique" ? 'selected' : ''; ?>>
+                        Collaboration artistique
+                    </option>
+                    <option value="Presse / Médias"
+                            <?php echo $sujet === "Presse / Médias" ? 'selected' : ''; ?>>
+                        Presse / Médias
+                    </option>
+                    <option value="Autre demande"
+                            <?php echo $sujet === "Autre demande" ? 'selected' : ''; ?>>
+                        Autre demande
+                    </option>
+                </select>
             </div>
 
             <div class="champ-groupe">
-                <label for="sujet">Sujet de votre message</label>
-                <input type="text" id="sujet" name="sujet" value="<?php echo htmlspecialchars(!empty($sujet_predefini) ? $sujet_predefini : $sujet); ?>" placeholder="Ex: Acquisition d'une oeuvre, Exposition...">
+                <label for="message">Message *</label>
+                <!-- htmlspecialchars() à l'affichage pour éviter l'injection dans le textarea -->
+                <textarea id="message" name="message" rows="6" required
+                          placeholder="Votre message..."><?php echo htmlspecialchars($message); ?></textarea>
             </div>
 
-            <div class="champ-groupe">
-                <label for="message">Votre message *</label>
-                <textarea id="message" name="message" required placeholder="Comment puis-je vous aider ?"><?php echo htmlspecialchars($message); ?></textarea>
-            </div>
-
-            <button type="submit" class="bouton-principal" style="width: fit-content; margin-top: 1rem;">
+            <button type="submit" class="bouton-principal">
                 Envoyer le message <span class="bouton-fleche">→</span>
             </button>
-        </form>
-    </div>
-</main>
 
+        </form>
+
+    </div>
+
+</section>
+
+<!-- footer -->
 <footer class="footer">
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
@@ -184,19 +249,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="https://instagram.com/kazahmedkone" target="_blank">@kazahmedkone</a>
         <a href="https://instagram.com/artpapakaz" target="_blank">@artpapakaz</a>
     </div>
-
-    <div class="footer-copy" style="min-width: 250px;">
+    <div class="footer-copy">
         <p>© 2026 Kaz Ahmed Koné · Tous droits réservés</p>
-        <p style="margin-top: 0.8rem; font-size: 0.7rem; line-height: 1.6;">
-            Design & Développement par <br>
-            <a href="https://www.linkedin.com/in/sarah-kabouche-2004263a2/" target="_blank" style="color: var(--accent); transition: var(--transition); white-space: nowrap;">Sarah Kabouche</a>
-            <span style="color: var(--texte-discret); margin: 0 5px;">|</span>
-            <a href="https://github.com/kabouchesarah4-cmd" target="_blank" style="color: var(--texte-discret); transition: var(--transition);">GitHub</a>
+        <p style="margin-top: 0.5rem; font-size: 0.7rem;">
+            Design & Développement ·
+            <a href="https://github.com/kabouchesarah4-cmd" target="_blank"
+               style="color: var(--accent);">Sarah Kabouche</a>
         </p>
     </div>
 </footer>
 
 <script src="js/main.js"></script>
-
 </body>
 </html>
