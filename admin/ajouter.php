@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix         = trim($_POST['prix'] ?? '');
     $stock        = (int)($_POST['stock'] ?? 1);
     $id_categorie = (int)($_POST['id_categorie'] ?? 0);
-
+    $lien_stripe = trim($_POST['lien_stripe'] ?? '');
     // vérification image
     if (empty($_FILES['image']['name'])) {
         $erreur = "Veuillez sélectionner une image.";
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $chemin_dest)) {
                 // insertion en BDD dans la table "produits"
                 $stmt = $pdo->prepare("
-                    INSERT INTO produits (titre, description, prix, stock, image, id_categorie)
+                    INSERT INTO produits (titre, description, prix, stock, image, id_categorie, lien_stripe)
                     VALUES (?, ?, ?, ?, ?, ?)
                 ");
                 $stmt->execute([
@@ -52,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $prix ?: null,
                         $stock,
                         $nom_image,
-                        $id_categorie ?: null
+                        $id_categorie ?: null,
+                        $lien_stripe ?: null
                 ]);
                 $message = "Œuvre ajoutée avec succès !";
             } else {
@@ -147,6 +148,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="image">Image * (JPG, PNG, WebP — max 5 Mo)</label>
                     <input type="file" name="image" id="image"
                            accept="image/jpeg,image/png,image/webp" required>
+                </div>
+
+                <div class="champ-groupe">
+                    <label for="lien_stripe">Lien Stripe (optionnel)</label>
+                    <input type="url" name="lien_stripe" id="lien_stripe"
+                           placeholder="https://buy.stripe.com/...">
+                    <small style="color: var(--texte-discret); font-size: 0.75rem;">
+                        Laisser vide si l'acquisition se fait par contact
+                    </small>
                 </div>
 
                 <button type="submit" class="bouton-principal"

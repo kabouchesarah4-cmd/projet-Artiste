@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix         = trim($_POST['prix'] ?? '');
     $stock        = (int)($_POST['stock'] ?? 1);
     $id_categorie = (int)($_POST['id_categorie'] ?? 0);
+    $lien_stripe = trim($_POST['lien_stripe'] ?? '');
 
     // nom de l'image : on garde l'ancienne par défaut
     $nom_image = $oeuvre['image'];
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($erreur)) {
         $stmt = $pdo->prepare("
             UPDATE produits
-            SET titre = ?, description = ?, prix = ?, stock = ?, image = ?, id_categorie = ?
+            SET titre = ?, description = ?, prix = ?, stock = ?, image = ?, id_categorie = ?, lien_stripe = ?
             WHERE id = ?
         ");
         $stmt->execute([
@@ -85,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stock,
             $nom_image,
             $id_categorie ?: null,
+            $lien_stripe ?: null,
             $id
         ]);
 
@@ -206,6 +208,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="image">Nouvelle image (laisser vide pour garder l'actuelle)</label>
                     <input type="file" name="image" id="image"
                            accept="image/jpeg,image/png,image/webp">
+                </div>
+
+                <div class="champ-groupe">
+                    <label for="lien_stripe">Lien Stripe (optionnel)</label>
+                    <input type="url" name="lien_stripe" id="lien_stripe"
+                           placeholder="https://buy.stripe.com/..."
+                           value="<?php echo htmlspecialchars($oeuvre['lien_stripe'] ?? ''); ?>">
                 </div>
 
                 <button type="submit" class="bouton-principal"
