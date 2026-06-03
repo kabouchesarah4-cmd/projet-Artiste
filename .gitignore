@@ -1,3 +1,4 @@
 config/database.php
+config/stripe-config.php
 .idea/
 *.iml
