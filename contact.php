@@ -27,6 +27,15 @@ if (isset($_GET['oeuvre']) && !empty($_GET['oeuvre'])) {
 // On intercepte la requête uniquement si le serveur confirme que la méthode utilisée est POST.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // SÉCURITÉ ANTI-SPAM — TECHNIQUE DU HONEYPOT (Pot de miel) :
+    // Un champ invisible "honeypot" est présent dans le formulaire HTML (masqué en CSS).
+    // Un vrai humain ne le voit pas et ne le remplit pas.
+    // Un robot qui scanne et remplit tous les champs aveuglément le remplira.
+    // Si le champ honeypot n'est pas vide → c'est un bot → on stoppe immédiatement.
+    if (!empty($_POST['honeypot'])) {
+        exit; // bot détecté, on coupe sans afficher d'erreur pour ne pas alerter le bot
+    }
+
     // SÉCURITÉ ANTI-FAILLE XSS (Cross-Site Scripting) :
     // trim() supprime les espaces inutiles au début et à la fin.
     // CORRECTION : on utilise trim() seulement ici — PAS htmlspecialchars() sur les données POST.
@@ -174,6 +183,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form action="contact.php" method="POST" class="formulaire">
+
+            <!-- HONEYPOT : champ invisible pour les humains, visible pour les bots
+                 display:none le cache visuellement, tabindex="-1" l'exclut de la navigation clavier
+                 Un vrai utilisateur ne le remplira jamais — un bot si, et sera rejeté côté PHP -->
+            <input type="text"
+                   name="honeypot"
+                   id="honeypot"
+                   value=""
+                   style="display:none !important;"
+                   tabindex="-1"
+                   autocomplete="off">
 
             <div class="champ-groupe">
                 <label for="nom">Nom complet *</label>
