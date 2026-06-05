@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// sécurité
+// Sécurité : non connecté = retour login
 if (!isset($_SESSION['admin_connecte']) || $_SESSION['admin_connecte'] !== true) {
     header('Location: login.php');
     exit;
@@ -17,11 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nouveau_mdp = $_POST['nouveau_mdp'] ?? '';
     $confirm_mdp = $_POST['confirm_mdp'] ?? '';
 
-    // on récupère l'id de l'admin stocké lors de la connexion
-    $admin_id = $_SESSION['admin_id'] ?? 1; // 1 par défaut si jamais
+    // On récupère l'id de l'admin stocké lors de la connexion
+    $admin_id = $_SESSION['admin_id'] ?? 1;
 
     if (empty($ancien_mdp) || empty($nouveau_mdp) || empty($confirm_mdp)) {
         $erreur = "Veuillez remplir tous les champs.";
+    } elseif (strlen($nouveau_mdp) < 8) {
+        $erreur = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
     } elseif ($nouveau_mdp !== $confirm_mdp) {
         $erreur = "Les nouveaux mots de passe ne correspondent pas.";
     } else {
@@ -88,17 +90,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" action="profil.php" class="formulaire">
                 <div class="champ-groupe">
                     <label for="ancien_mdp">Ancien mot de passe</label>
-                    <input type="password" name="ancien_mdp" id="ancien_mdp" required>
+                    <input type="password" name="ancien_mdp" id="ancien_mdp" autocomplete="off" required>
                 </div>
 
                 <div class="champ-groupe">
                     <label for="nouveau_mdp">Nouveau mot de passe</label>
-                    <input type="password" name="nouveau_mdp" id="nouveau_mdp" required>
+                    <input type="password" name="nouveau_mdp" id="nouveau_mdp" autocomplete="off" required>
                 </div>
 
                 <div class="champ-groupe">
                     <label for="confirm_mdp">Confirmer le nouveau mot de passe</label>
-                    <input type="password" name="confirm_mdp" id="confirm_mdp" required>
+                    <input type="password" name="confirm_mdp" id="confirm_mdp" autocomplete="off" required>
                 </div>
 
                 <button type="submit" class="bouton-principal" style="width: 100%; margin-top: 1.5rem; justify-content: center;">
