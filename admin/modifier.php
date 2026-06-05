@@ -211,10 +211,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="champ-groupe">
-                    <label for="lien_stripe">Lien Stripe (optionnel)</label>
+                    <label for="lien_stripe">Lien de paiement Stripe (optionnel)</label>
                     <input type="url" name="lien_stripe" id="lien_stripe"
                            placeholder="https://buy.stripe.com/..."
                            value="<?php echo htmlspecialchars($oeuvre['lien_stripe'] ?? ''); ?>">
+                    <small style="color: var(--texte-discret); font-size: 0.75rem; margin-top: 0.3rem; display:block;">
+                        Laisser vide → le visiteur sera redirigé vers le formulaire de contact
+                    </small>
                 </div>
 
                 <button type="submit" class="bouton-principal"
