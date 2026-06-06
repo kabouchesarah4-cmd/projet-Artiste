@@ -1,3 +1,22 @@
+<?php
+// ÉTAPE 1 : CONNEXION À LA BASE DE DONNÉES
+// On inclut le fichier de configuration PDO dès la première ligne du fichier.
+// Comme on est à la racine du site, le chemin est 'config/database.php' (sans le '../')
+require_once 'config/database.php';
+
+// ÉTAPE 2 : REQUÊTE SQL POUR LES 3 DERNIÈRES ŒUVRES
+// On va chercher les produits dans la BDD, triés du plus récent au plus ancien (DESC).
+// On utilise LIMIT 3 pour ne pas surcharger la page d'accueil.
+// Le LEFT JOIN permet de récupérer le nom de la catégorie pour l'afficher en sous-titre.
+$stmt = $pdo->query("
+    SELECT p.*, c.nom AS categorie_nom 
+    FROM produits p 
+    LEFT JOIN categories c ON p.id_categorie = c.id 
+    ORDER BY p.id DESC 
+    LIMIT 3
+");
+$oeuvres_recentes = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,27 +30,22 @@
 </head>
 <body>
 
-<!-- NAVIGATION -->
 <header class="header" id="header">
     <nav class="nav">
         <div class="nav-logo">
-            <a href="index.html">KAZ <span>AHMED KONÉ</span></a>
+            <a href="index.php">KAZ <span>AHMED KONÉ</span></a>
         </div>
         <button class="nav-hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-liens" id="nav-liens">
-            <li><a href="index.html" class="actif">Accueil</a></li>
+            <li><a href="index.php" class="actif">Accueil</a></li>
             <li><a href="galerie.php">Galerie</a></li>
             <li><a href="a-propos.html">À propos</a></li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
 </header>
-
-
-
-
 
 <section class="hero">
     <div class="hero-overlay"></div>
@@ -55,45 +69,55 @@
     </div>
 </section>
 
-<!-- APERÇU — 3 oeuvres en avant-->
 <section class="apercu-oeuvres">
     <div class="section-header">
         <span class="section-tag">Sélection</span>
         <h2 class="section-titre">Œuvres récentes</h2>
     </div>
+
     <div class="apercu-grille">
 
-        <a href="galerie.php" class="apercu-carte">
-            <div class="apercu-image" style="background: linear-gradient(135deg, #1a0000, #8b0000);"></div>
-            <div class="apercu-info">
-                <p class="apercu-titre">Zaouli Funk</p>
-                <p class="apercu-details">Création numérique · 2015–2025</p>
-            </div>
-        </a>
+        <?php if (empty($oeuvres_recentes)): ?>
+            <p style="color: var(--texte-discret); text-align: center; width: 100%;">Nouvelles œuvres à venir...</p>
+        <?php else: ?>
 
-        <a href="galerie.php" class="apercu-carte apercu-carte--grande">
-            <div class="apercu-image" style="background: linear-gradient(135deg, #2a1500, #c9a84c);"></div>
-            <div class="apercu-info">
-                <p class="apercu-titre">Acrylique on kraft</p>
-                <p class="apercu-details">Acrylique sur kraft · A3</p>
-            </div>
-        </a>
+            <?php foreach ($oeuvres_recentes as $index => $oeuvre): ?>
+                <?php
+                // Logique de design : dans ton code HTML d'origine, la 2ème carte (index 1)
+                // avait la classe "apercu-carte--grande". On la rajoute dynamiquement ici.
+                $classe_grande = ($index === 1) ? 'apercu-carte--grande' : '';
 
-        <a href="galerie.php" class="apercu-carte">
-            <div class="apercu-image" style="background: linear-gradient(135deg, #001a1a, #0a4a4a);"></div>
-            <div class="apercu-info">
-                <p class="apercu-titre">Voodoo Child</p>
-                <p class="apercu-details">Création numérique · série</p>
-            </div>
-        </a>
+                // Logique d'affichage de l'image : on remplace tes couleurs dégradées par la vraie image.
+                // Si l'image existe physiquement dans le dossier, on la met en background-image.
+                // Sinon, on remet un fond sombre par défaut.
+                if (!empty($oeuvre['image']) && file_exists('images/oeuvres/' . $oeuvre['image'])) {
+                    $bg_image = "background-image: url('images/oeuvres/" . htmlspecialchars($oeuvre['image']) . "'); background-size: cover; background-position: center;";
+                } else {
+                    $bg_image = "background: linear-gradient(135deg, #1a1a1a, #0d0d0d);";
+                }
+                ?>
+
+                <a href="galerie.php" class="apercu-carte <?php echo $classe_grande; ?>">
+                    <div class="apercu-image" style="<?php echo $bg_image; ?>"></div>
+                    <div class="apercu-info">
+                        <p class="apercu-titre"><?php echo htmlspecialchars($oeuvre['titre']); ?></p>
+                        <p class="apercu-details">
+                            <?php echo htmlspecialchars($oeuvre['categorie_nom'] ?? 'Œuvre originale'); ?>
+                            <?php if (!empty($oeuvre['prix'])) echo ' · ' . number_format($oeuvre['prix'], 0, ',', ' ') . ' €'; ?>
+                        </p>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+
+        <?php endif; ?>
 
     </div>
+
     <div class="apercu-footer">
         <a href="galerie.php" class="bouton-secondaire">Voir toute la galerie</a>
     </div>
 </section>
 
-<!-- citation de l artiste  -->
 <section class="citation">
     <blockquote>
         « L'art est ma prière silencieuse, la toile mon sanctuaire. »
@@ -101,7 +125,6 @@
     <cite>— Kaz Ahmed Koné</cite>
 </section>
 
-<!-- PRÉSENTATION RAPIDE-->
 <section class="presentation">
     <div class="presentation-image">
         <img src="images/artiste/portrait-kaz2.jpg" alt="Kaz Ahmed Koné">
@@ -123,7 +146,6 @@
     </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
