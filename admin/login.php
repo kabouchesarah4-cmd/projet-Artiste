@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </form>
 
-    <a href="../index.html" class="login-retour">← Retour à la galerie publique</a>
+    <a href="../index.php" class="login-retour">← Retour à la galerie publique</a>
 
 </div>
 

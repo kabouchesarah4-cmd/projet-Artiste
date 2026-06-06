@@ -42,7 +42,7 @@ $oeuvres = $stmt->fetchAll();
         <a href="ajouter.php" class="admin-nav-lien">+ Ajouter une œuvre</a>
         <a href="messages.php" class="admin-nav-lien">Messages</a>
         <a href="profil.php" class="admin-nav-lien">Mon Profil</a>
-        <a href="../index.html" class="admin-nav-lien" style="margin-top: 1rem;">← Site public</a>
+        <a href="../index.php" class="admin-nav-lien" style="margin-top: 1rem;">← Site public</a>
         <a href="logout.php" class="admin-nav-lien danger" style="margin-top: auto;">Déconnexion</a>
     </aside>
 

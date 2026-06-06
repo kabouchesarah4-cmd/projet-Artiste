@@ -60,13 +60,13 @@ $disponible = $oeuvre['stock'] > 0;
 <header class="header" id="header">
     <nav class="nav">
         <div class="nav-logo">
-            <a href="index.html">KAZ <span>AHMED KONÉ</span></a>
+            <a href="index.php">KAZ <span>AHMED KONÉ</span></a>
         </div>
         <button class="nav-hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-liens" id="nav-liens">
-            <li><a href="index.html">Accueil</a></li>
+            <li><a href="index.php">Accueil</a></li>
             <li><a href="galerie.php" class="actif">Galerie</a></li>
             <li><a href="a-propos.html">À propos</a></li>
             <li><a href="contact.php">Contact</a></li>
