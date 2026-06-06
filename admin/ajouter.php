@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 
 // sécurité
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // insertion en BDD dans la table "produits"
                 $stmt = $pdo->prepare("
                     INSERT INTO produits (titre, description, prix, stock, image, id_categorie, lien_stripe)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?,?)
                 ");
                 $stmt->execute([
                         $titre,
