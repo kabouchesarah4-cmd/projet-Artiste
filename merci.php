@@ -108,7 +108,7 @@ if (isset($_GET['session_id']) && isset($_GET['oeuvre_id'])) {
         <ul class="nav-liens">
             <li><a href="index.php">Accueil</a></li>
             <li><a href="galerie.php">Galerie</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="a-propos.php">À propos</a></li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>

@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <ul class="nav-liens" id="nav-liens">
             <li><a href="index.php">Accueil</a></li>
             <li><a href="galerie.php">Galerie</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="a-propos.php">À propos</a></li>
             <li><a href="contact.php" class="actif">Contact</a></li>
         </ul>
     </nav>
@@ -262,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
         <a href="galerie.php">Galerie</a>
-        <a href="a-propos.html">À propos</a>
+        <a href="a-propos.php">À propos</a>
         <a href="contact.php">Contact</a>
     </div>
     <div class="footer-reseaux">
