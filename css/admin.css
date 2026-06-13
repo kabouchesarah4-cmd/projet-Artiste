@@ -585,6 +585,77 @@ input[type="file"]::-webkit-file-upload-button {
 
 
 /* ============================================================
+   PAGE PROFIL (profil.php) - Formulaires contenus et sécurité
+   ============================================================ */
+.admin-container {
+    max-width: 800px;
+    margin: 0; /* Aligné à gauche comme le reste de ton admin */
+    background: var(--fond-secondaire); /* Fond gris très foncé de ton thème */
+    padding: 2.5rem;
+    border: 1px solid var(--bordure);
+}
+
+.champ-groupe {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.8rem;
+}
+
+.champ-groupe label {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--texte-discret);
+    margin-bottom: 0.8rem;
+}
+
+/* On utilise les variables de ton thème pour que ça matche */
+.champ-groupe textarea,
+.champ-groupe input[type="file"] {
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--fond-carte);
+    color: var(--texte);
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.champ-groupe textarea:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.btn-submit {
+    background: transparent;
+    color: var(--accent);
+    padding: 1rem 2rem;
+    border: 1px solid var(--accent);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    background: var(--accent);
+    color: var(--fond);
+}
+
+.message-succes {
+    /* Tu avais déjà une classe .succes dans ton fichier, on la réutilise visuellement */
+    background: rgba(76, 175, 80, 0.12);
+    border: 1px solid #4caf50;
+    color: #81c784;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+
+
+
+/* ============================================================
    RESPONSIVE ADMIN
    ============================================================ */
 
