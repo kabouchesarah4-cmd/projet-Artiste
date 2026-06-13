@@ -1,3 +1,17 @@
+<?php
+// =========================================================================
+// CONNEXION BDD & RÉCUPÉRATION DU CONTENU DYNAMIQUE
+// =========================================================================
+
+// 1. On se connecte à la base de données via notre fichier de configuration
+require_once __DIR__ . '/config/database.php';
+
+// 2. On interroge la table 'profil_artiste' pour récupérer les textes et images (ligne id=1)
+$stmt_profil = $pdo->query("SELECT * FROM profil_artiste WHERE id = 1");
+
+// 3. On stocke le résultat dans la variable $profil pour pouvoir l'afficher plus bas dans le HTML
+$profil = $stmt_profil->fetch();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,7 +37,7 @@
         <ul class="nav-liens" id="nav-liens">
             <li><a href="index.php">Accueil</a></li>
             <li><a href="galerie.php">Galerie</a></li>
-            <li><a href="a-propos.html" class="actif">À propos</a></li>
+            <li><a href="a-propos.php" class="actif">À propos</a></li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
@@ -38,7 +52,7 @@
 <section class="apropos-principale">
 
     <div class="apropos-photo-wrapper">
-        <img src="images/artiste/portrait-kaz.jpg"
+        <img src="images/artiste/<?= htmlspecialchars($profil['image_apropos']) ?>"
              alt="Kaz Ahmed Koné"
              style="width:100%; display:block; position:relative; z-index:1;">
         <div class="apropos-photo-cadre"></div>
@@ -51,20 +65,7 @@
             Artiste plasticien autodidacte · Né à Nice · Installé à Nancy
         </p>
         <p>
-            Né à Nice, bercé par les rythmes ensoleillés de la Côte d'Ivoire
-            des années 80, Kaz Ahmed Koné a grandi entre les ruelles animées
-            d'Abidjan et les paysages contrastés de la France des années 90.
-        </p>
-        <p>
-            Amoureux du basket et de la musique, il puise son inspiration dans
-            les vibrations de son enfance — où les sons du zouglou côtoyaient
-            les mélodies pop, et où les graffitis urbains dialoguaient avec
-            les motifs ancestraux ivoiriens.
-        </p>
-        <p>
-            Son art pluridisciplinaire est un voyage entre tradition et modernité :
-            de la peinture classique au numérique, en passant par l'upcycling
-            et la sculpture, il explore sans cesse de nouveaux horizons.
+            <?= nl2br(htmlspecialchars($profil['biographie_complete'])) ?>
         </p>
     </div>
 
@@ -167,7 +168,7 @@
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
         <a href="galerie.php">Galerie</a>
-        <a href="a-propos.html">À propos</a>
+        <a href="a-propos.php">À propos</a>
         <a href="contact.php">Contact</a>
     </div>
     <div class="footer-reseaux">

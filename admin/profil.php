@@ -12,41 +12,78 @@ require_once '../config/database.php';
 $message = '';
 $erreur  = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+// TRAITEMENT 1 : MISE À JOUR DES INFOS ET IMAGES DU SITE
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_infos'])) {
+    $citation = trim($_POST['citation']);
+    $presentation = trim($_POST['presentation_accueil']);
+    $biographie = trim($_POST['biographie_complete']);
+
+    $img_accueil = $_POST['image_accueil_actuelle'];
+    $img_apropos = $_POST['image_apropos_actuelle'];
+
+    function gererUpload($inputName, $ancienneImage) {
+        if (isset($_FILES[$inputName]) && $_FILES[$inputName]['error'] === UPLOAD_ERR_OK) {
+            $nomFichier = time() . '_' . basename($_FILES[$inputName]['name']);
+            $cheminDestination = '../images/artiste/' . $nomFichier;
+
+            if (move_uploaded_file($_FILES[$inputName]['tmp_name'], $cheminDestination)) {
+                if (!empty($ancienneImage) && file_exists('../images/artiste/' . $ancienneImage)) {
+                    unlink('../images/artiste/' . $ancienneImage);
+                }
+                return $nomFichier;
+            }
+        }
+        return $ancienneImage;
+    }
+
+    $img_accueil = gererUpload('image_accueil', $img_accueil);
+    $img_apropos = gererUpload('image_apropos', $img_apropos);
+
+    $stmt = $pdo->prepare("UPDATE profil_artiste SET citation = ?, presentation_accueil = ?, biographie_complete = ?, image_accueil = ?, image_apropos = ? WHERE id = 1");
+    $stmt->execute([$citation, $presentation, $biographie, $img_accueil, $img_apropos]);
+
+    $message = "Le contenu du site a été mis à jour avec succès !";
+}
+
+
+// TRAITEMENT 2 : CHANGEMENT DE MOT DE PASSE
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_password'])) {
     $ancien_mdp  = $_POST['ancien_mdp'] ?? '';
     $nouveau_mdp = $_POST['nouveau_mdp'] ?? '';
     $confirm_mdp = $_POST['confirm_mdp'] ?? '';
 
-    // On récupère l'id de l'admin stocké lors de la connexion
     $admin_id = $_SESSION['admin_id'] ?? 1;
 
     if (empty($ancien_mdp) || empty($nouveau_mdp) || empty($confirm_mdp)) {
-        $erreur = "Veuillez remplir tous les champs.";
+        $erreur = "Veuillez remplir tous les champs de mot de passe.";
     } elseif (strlen($nouveau_mdp) < 8) {
         $erreur = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
     } elseif ($nouveau_mdp !== $confirm_mdp) {
         $erreur = "Les nouveaux mots de passe ne correspondent pas.";
     } else {
-        // On récupère le mot de passe actuel en BDD pour le vérifier
         $stmt = $pdo->prepare("SELECT mot_de_passe FROM admin WHERE id = ?");
         $stmt->execute([$admin_id]);
         $admin = $stmt->fetch();
 
-        // On vérifie que l'ancien mot de passe tapé est le bon
         if ($admin && password_verify($ancien_mdp, $admin['mot_de_passe'])) {
-            // Hachage du nouveau mot de passe
             $nouveau_hash = password_hash($nouveau_mdp, PASSWORD_DEFAULT);
-
-            // Mise à jour en BDD
             $update = $pdo->prepare("UPDATE admin SET mot_de_passe = ? WHERE id = ?");
             $update->execute([$nouveau_hash, $admin_id]);
-
             $message = "Mot de passe modifié avec succès !";
         } else {
             $erreur = "L'ancien mot de passe est incorrect.";
         }
     }
 }
+
+
+// RÉCUPÉRATION DES DONNÉES DU PROFIL (Pour le formulaire 1)
+
+$stmt_profil = $pdo->query("SELECT * FROM profil_artiste WHERE id = 1");
+$profil = $stmt_profil->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -75,39 +112,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </aside>
 
     <main class="admin-main">
-        <h1 class="admin-titre">Modifier mon mot de passe</h1>
+        <h1 class="admin-titre">Mon Profil</h1>
+        <p class="admin-sous-titre">Gérer les informations publiques et la sécurité du compte</p>
 
-        <div class="form-container" style="max-width: 500px;">
+        <?php if (!empty($message)): ?>
+            <div class="succes"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
 
-            <?php if (!empty($message)): ?>
-                <div class="succes"><?php echo htmlspecialchars($message); ?></div>
-            <?php endif; ?>
+        <?php if (!empty($erreur)): ?>
+            <div class="erreur-admin"><?php echo htmlspecialchars($erreur); ?></div>
+        <?php endif; ?>
 
-            <?php if (!empty($erreur)): ?>
-                <div class="erreur-admin"><?php echo htmlspecialchars($erreur); ?></div>
-            <?php endif; ?>
+        <div class="admin-container" style="margin-bottom: 3rem;">
+            <h2 class="admin-section-titre" style="margin-bottom: 2rem;">Contenu public (Accueil & À propos)</h2>
+
+            <form action="profil.php" method="POST" enctype="multipart/form-data">
+
+                <input type="hidden" name="image_accueil_actuelle" value="<?= htmlspecialchars($profil['image_accueil']) ?>">
+                <input type="hidden" name="image_apropos_actuelle" value="<?= htmlspecialchars($profil['image_apropos']) ?>">
+
+                <div class="champ-groupe">
+                    <label>Citation courte (Accueil)</label>
+                    <textarea name="citation" rows="3"><?= htmlspecialchars($profil['citation']) ?></textarea>
+                </div>
+
+                <div class="champ-groupe">
+                    <label>Présentation courte (Accueil)</label>
+                    <textarea name="presentation_accueil" rows="5"><?= htmlspecialchars($profil['presentation_accueil']) ?></textarea>
+                </div>
+
+                <div class="champ-groupe">
+                    <label>Biographie complète (Page À propos)</label>
+                    <textarea name="biographie_complete" rows="10"><?= htmlspecialchars($profil['biographie_complete']) ?></textarea>
+                </div>
+
+                <div class="champ-groupe">
+                    <label>Image Portrait (Accueil)</label>
+                    <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">Actuelle : <?= htmlspecialchars($profil['image_accueil']) ?></p>
+                    <input type="file" name="image_accueil" accept="image/jpeg, image/png, image/webp">
+                </div>
+
+                <div class="champ-groupe">
+                    <label>Image Biographie (Page À propos)</label>
+                    <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">Actuelle : <?= htmlspecialchars($profil['image_apropos']) ?></p>
+                    <input type="file" name="image_apropos" accept="image/jpeg, image/png, image/webp">
+                </div>
+
+                <button type="submit" name="submit_infos" class="btn-submit">Enregistrer le contenu</button>
+            </form>
+        </div>
+
+        <div class="admin-container">
+            <h2 class="admin-section-titre" style="margin-bottom: 2rem;">Sécurité du compte</h2>
 
             <form method="POST" action="profil.php" class="formulaire">
                 <div class="champ-groupe">
                     <label for="ancien_mdp">Ancien mot de passe</label>
-                    <input type="password" name="ancien_mdp" id="ancien_mdp" autocomplete="off" required>
+                    <input type="password" name="ancien_mdp" id="ancien_mdp" autocomplete="off" required style="padding: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.1); background: var(--fond-carte); color: var(--texte);">
                 </div>
 
                 <div class="champ-groupe">
                     <label for="nouveau_mdp">Nouveau mot de passe</label>
-                    <input type="password" name="nouveau_mdp" id="nouveau_mdp" autocomplete="off" required>
+                    <input type="password" name="nouveau_mdp" id="nouveau_mdp" autocomplete="off" required style="padding: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.1); background: var(--fond-carte); color: var(--texte);">
                 </div>
 
                 <div class="champ-groupe">
                     <label for="confirm_mdp">Confirmer le nouveau mot de passe</label>
-                    <input type="password" name="confirm_mdp" id="confirm_mdp" autocomplete="off" required>
+                    <input type="password" name="confirm_mdp" id="confirm_mdp" autocomplete="off" required style="padding: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.1); background: var(--fond-carte); color: var(--texte);">
                 </div>
 
-                <button type="submit" class="bouton-principal" style="width: 100%; margin-top: 1.5rem; justify-content: center;">
-                    Enregistrer le mot de passe →
-                </button>
+                <button type="submit" name="submit_password" class="btn-submit">Modifier le mot de passe</button>
             </form>
         </div>
+
     </main>
 
 </div>

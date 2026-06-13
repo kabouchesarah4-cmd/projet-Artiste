@@ -16,6 +16,10 @@ $stmt = $pdo->query("
     LIMIT 3
 ");
 $oeuvres_recentes = $stmt->fetchAll();
+
+//NOUVEAU : Récupération des données du profil de l'artiste ( pour dynamiser les infos )
+$stmt_profil = $pdo->query("SELECT * FROM profil_artiste WHERE id = 1");
+$profil = $stmt_profil->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -41,7 +45,7 @@ $oeuvres_recentes = $stmt->fetchAll();
         <ul class="nav-liens" id="nav-liens">
             <li><a href="index.php" class="actif">Accueil</a></li>
             <li><a href="galerie.php">Galerie</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="a-propos.php">À propos</a></li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
@@ -120,29 +124,22 @@ $oeuvres_recentes = $stmt->fetchAll();
 
 <section class="citation">
     <blockquote>
-        « L'art est ma prière silencieuse, la toile mon sanctuaire. »
+        <?= nl2br(htmlspecialchars($profil['citation'])) ?>
     </blockquote>
     <cite>— Kaz Ahmed Koné</cite>
 </section>
 
 <section class="presentation">
     <div class="presentation-image">
-        <img src="images/artiste/portrait-kaz2.jpg" alt="Kaz Ahmed Koné">
+        <img src="images/artiste/<?= htmlspecialchars($profil['image_accueil']) ?>" alt="Kaz Ahmed Koné">
     </div>
     <div class="presentation-texte">
         <span class="section-tag">L'artiste</span>
         <h2>Kaz Ahmed Koné</h2>
         <p>
-            Né à Nice, bercé par les rythmes ensoleillés de la Côte d'Ivoire des années 80,
-            Kaz Ahmed Koné est un artiste plasticien autodidacte installé à Nancy.
-            Peinture, numérique, upcycling, sculpture — son art pluridisciplinaire
-            est un voyage entre tradition africaine et modernité européenne.
+            <?= nl2br(htmlspecialchars($profil['presentation_accueil'])) ?>
         </p>
-        <p>
-            Son œuvre invite le spectateur à devenir explorateur de ses textures,
-            contrastes et symboles. Une ode à la diversité et à l'innovation.
-        </p>
-        <a href="a-propos.html" class="bouton-secondaire">Lire la biographie</a>
+        <a href="a-propos.php" class="bouton-secondaire">Lire la biographie</a>
     </div>
 </section>
 
@@ -150,7 +147,7 @@ $oeuvres_recentes = $stmt->fetchAll();
     <div class="footer-logo">KAZ <span>AHMED KONÉ</span></div>
     <div class="footer-nav">
         <a href="galerie.php">Galerie</a>
-        <a href="a-propos.html">À propos</a>
+        <a href="a-propos.php">À propos</a>
         <a href="contact.php">Contact</a>
     </div>
     <div class="footer-reseaux">
