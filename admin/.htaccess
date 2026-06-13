@@ -1,2 +1,8 @@
+# pour le https sécurisé
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+Options -Indexes
 Options -Indexes
 # pour pas que le dossier admin soit visible publiquement
