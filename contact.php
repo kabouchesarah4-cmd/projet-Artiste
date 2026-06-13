@@ -57,30 +57,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message_erreur = "L'adresse email fournie n'est pas valide.";
     } else {
 
-        // SÉCURITÉ ANTI-INJECTION SQL (Requête préparée) :
-        // On ne concatène JAMAIS les variables dans la chaîne SQL. On utilise des marqueurs (?).
-        // PDO gère lui-même l'échappement des données — pas besoin de htmlspecialchars() avant.
-        try {
-            $stmt = $pdo->prepare("
-                INSERT INTO messages_contact (nom, email, sujet, message)
-                VALUES (?, ?, ?, ?)
-            ");
+        // --- NOUVEAU : LE FILTRE ANTI-SPAM (Le Videur) ---
+        $is_spam = false;
 
-            // L'exécution lie les données brutes aux marqueurs de manière totalement sécurisée.
-            $stmt->execute([$nom, $email, $sujet, $message]);
+        // Liste des mots-clés typiques des spambots
+        $mots_interdits = [
+                'http://',
+                'https://',
+                'www.',
+                'GoogleSearchIndex',
+                'SEO',
+                'viagra',
+                'crypto',
+                'marketing'
+        ];
 
-            // Notification de succès pour l'utilisateur
+        // Vérification dans le message, le sujet et même le nom
+        foreach ($mots_interdits as $mot) {
+            if (stripos($message, $mot) !== false || stripos($sujet, $mot) !== false || stripos($nom, $mot) !== false) {
+                $is_spam = true;
+                break; // On arrête la boucle au premier mot interdit trouvé
+            }
+        }
+
+        // --- DÉCISION DU FILTRE ---
+        if ($is_spam) {
+            // Leurre : On fait croire au bot que ça a marché, mais on ne sauvegarde rien en BDD.
             $message_succes = "Merci " . htmlspecialchars($nom) . " ! Votre message a bien été transmis à Kaz Ahmed Koné.";
 
-            // RÉINITIALISATION DES CHAMPS : On vide le formulaire pour éviter un double envoi au rafraîchissement
+            // RÉINITIALISATION DES CHAMPS : On vide le formulaire pour éviter un double envoi
             $nom = $email = $sujet = $message = $sujet_predefini = '';
+        } else {
 
-        } catch (PDOException $e) {
-            // SÉCURITÉ EN PRODUCTION : Filtrage de l'affichage des erreurs SQL selon l'environnement
-            if ($_SERVER['SERVER_NAME'] === 'localhost') {
-                $message_erreur = "Erreur BDD (local) : " . $e->getMessage();
-            } else {
-                $message_erreur = "Une erreur technique est survenue. Veuillez réessayer plus tard.";
+            // SÉCURITÉ ANTI-INJECTION SQL (Requête préparée) :
+            // On ne concatène JAMAIS les variables dans la chaîne SQL. On utilise des marqueurs (?).
+            // PDO gère lui-même l'échappement des données — pas besoin de htmlspecialchars() avant.
+            try {
+                $stmt = $pdo->prepare("
+                    INSERT INTO messages_contact (nom, email, sujet, message)
+                    VALUES (?, ?, ?, ?)
+                ");
+
+                // L'exécution lie les données brutes aux marqueurs de manière totalement sécurisée.
+                $stmt->execute([$nom, $email, $sujet, $message]);
+
+                // Notification de succès pour l'utilisateur
+                $message_succes = "Merci " . htmlspecialchars($nom) . " ! Votre message a bien été transmis à Kaz Ahmed Koné.";
+
+                // RÉINITIALISATION DES CHAMPS : On vide le formulaire pour éviter un double envoi au rafraîchissement
+                $nom = $email = $sujet = $message = $sujet_predefini = '';
+
+            } catch (PDOException $e) {
+                // SÉCURITÉ EN PRODUCTION : Filtrage de l'affichage des erreurs SQL selon l'environnement
+                if ($_SERVER['SERVER_NAME'] === 'localhost') {
+                    $message_erreur = "Erreur BDD (local) : " . $e->getMessage();
+                } else {
+                    $message_erreur = "Une erreur technique est survenue. Veuillez réessayer plus tard.";
+                }
             }
         }
     }
