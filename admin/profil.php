@@ -146,6 +146,10 @@ $profil = $stmt_profil->fetch();
                     <textarea name="biographie_complete" rows="10"><?= htmlspecialchars($profil['biographie_complete']) ?></textarea>
                 </div>
 
+                <p style="font-size: 0.75rem; color: #ff9090; margin-bottom: 0.5rem;">
+                    Pour ne pas ralentir le chargement de votre site public, veuillez utiliser des images compressées (moins de 2 Mo si possible).
+                </p>
+
                 <div class="champ-groupe">
                     <label>Image Portrait (Accueil)</label>
                     <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">Actuelle : <?= htmlspecialchars($profil['image_accueil']) ?></p>
